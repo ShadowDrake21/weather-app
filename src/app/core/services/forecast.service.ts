@@ -4,62 +4,61 @@ import { Injectable } from '@angular/core';
 
 import { MAIN_ENDPOINT, MAIN_PATH_PART } from '../constants/main.constans';
 import { environment } from '../../../environments/environment';
-import { IWeatherByNow } from '../../shared/models/weather.model';
+import { IForecast } from '../../shared/models/forecast.model';
 import { Units } from '../../shared/models/generals.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WeatherService {
+export class ForecastService {
   constructor(private http: HttpClient) {}
 
-  public getCurrentWeatherByCoordinates(
+  public getiveDaysForecastByCoordinates(
     lat: number,
     lon: number,
     units: Units = 'metric',
     lang: string = 'en'
-  ): Observable<IWeatherByNow> {
-    return this.http.get<IWeatherByNow>(
-      `${MAIN_ENDPOINT}${MAIN_PATH_PART}weather?lat=${lat}&lon=${lon}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
+  ): Observable<IForecast> {
+    return this.http.get<IForecast>(
+      `${MAIN_ENDPOINT}${MAIN_PATH_PART}forecast?lat=${lat}&lon=${lon}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 
-  // imperial - Fahrenheit, metric - Celsius, Kelvin - standart
-  public getCurrentWeatherByName(
+  public getFiveDaysForecastByName(
     cityName: string,
     stateCode?: string,
     countryCode?: string,
     units: Units = 'metric',
     lang: string = 'en'
-  ): Observable<IWeatherByNow> {
-    return this.http.get<IWeatherByNow>(
-      `${MAIN_ENDPOINT}${MAIN_PATH_PART}weather?q=${cityName}` +
+  ): Observable<IForecast> {
+    return this.http.get<IForecast>(
+      `${MAIN_ENDPOINT}${MAIN_PATH_PART}forecast?q=${cityName}` +
         (stateCode ? `,${stateCode}` : '') +
         (countryCode ? `,${countryCode}` : '') +
         `&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 
-  public getCurrentWeatherByCityID(
+  public getFiveDaysForecastByCityID(
     cityId: string,
     units: Units = 'metric',
     lang: string = 'en'
-  ): Observable<IWeatherByNow> {
-    return this.http.get<IWeatherByNow>(
-      `${MAIN_ENDPOINT}${MAIN_PATH_PART}weather?id=${Number.parseInt(
+  ): Observable<IForecast> {
+    return this.http.get<IForecast>(
+      `${MAIN_ENDPOINT}${MAIN_PATH_PART}forecast?id=${Number.parseInt(
         cityId
       )}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 
-  public getCurrentWeatherByZipcode(
+  public getFiveDaysForecastByZipcode(
     zipcode: string,
     countryCode: string,
     units: Units = 'metric',
     lang: string = 'en'
-  ): Observable<IWeatherByNow> {
-    return this.http.get<IWeatherByNow>(
-      `${MAIN_ENDPOINT}${MAIN_PATH_PART}weather?zip=${zipcode},${countryCode}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
+  ): Observable<IForecast> {
+    return this.http.get<IForecast>(
+      `${MAIN_ENDPOINT}${MAIN_PATH_PART}forecast?zip=${zipcode},${countryCode}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 }
