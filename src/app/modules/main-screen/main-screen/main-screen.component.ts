@@ -34,7 +34,8 @@ export class MainScreenComponent implements OnInit {
   });
 
   initialActivePhoto: IPhotoInfo = {
-    url: '/assets/background-img.jpg',
+    // url: '/assets/background-img.jpg',
+    url: 'https://images.unsplash.com/photo-1629814696209-4f4faf2ab874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODEyOTZ8MHwxfHNlYXJjaHw5fHxLcmFrJUMzJUIzd3xlbnwwfHx8fDE3MTA5NDY3Njd8MA&ixlib=rb-4.0.3&q=80&w=1080',
     title: 'Welcome!',
   };
 
@@ -75,7 +76,7 @@ export class MainScreenComponent implements OnInit {
       .getPhotos(cityName)
       .subscribe((photos: IPhotoInfo[]) => {
         const shuffledPhotos = shuffleArray(photos);
-        this.activePhoto = of(this.photos$$.getValue()?.[0]!);
+        // this.activePhoto = of(this.photos$$.getValue()?.[0]!);
         this.photos$$.next(shuffledPhotos);
       });
   }
