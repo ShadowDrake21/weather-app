@@ -30,6 +30,7 @@ export class UnsplashService {
     return results.map((result) => ({
       url: result.urls.regular,
       title: result.title,
+      orientation: 'landscape',
     }));
   }
 }
