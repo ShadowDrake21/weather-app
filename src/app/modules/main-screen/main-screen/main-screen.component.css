@@ -1,0 +1,7 @@
+.main-screen__section {
+  height: 100vh;
+  background-image: url("/assets/background-img.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
