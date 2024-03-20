@@ -2,7 +2,7 @@
   class="main-screen__section"
   [ngStyle]="{ 'background-image': 'url(' + (activePhoto | async)?.url + ')' }"
 >
-  <div>
+  <div class="main-screen__wrapper">
     <form [formGroup]="searchForm">
       <input
         formControlName="cityName"
@@ -10,9 +10,8 @@
         (input)="onCityNameInput()"
       />
     </form>
-    <div>
-      <div *ngIf="weather$$ | async as weather">
-        <p><span>ID:</span> {{ weather.id }}</p>
+    <div class="main-screen__info">
+      <div *ngIf="weather$$ | async as weather" class="main-screen__info-list">
         <p><span>City name: </span>{{ weather.name }}</p>
         <div *ngIf="weather.weather as weatherDescs">
           <ng-container *ngFor="let weatherDesc of weatherDescs">
@@ -28,21 +27,11 @@
         </div>
         <p *ngIf="weather.clouds as weatherClouds">
           <span>Cloudiness:</span> {{ weatherClouds.all }} %
-        </p>
-        <p><span>Base:</span>{{ weather.base }}</p>
-        <p>
           <span>Time of data calculation:</span
           >{{ weather.dt | time | date : "medium" }}
         </p>
-        <p>
-          <span>Shift in seconds from UTC:</span
-          >{{ weather.timezone | time | date : "medium" }}
-        </p>
         <p><span>Visibility:</span>{{ weather.visibility }}</p>
         <div *ngIf="weather.sys as weatherSys">
-          <h3>System parameters:</h3>
-          <p><span>ID:</span>{{ weatherSys.id }}</p>
-          <p><span>Type:</span>{{ weatherSys.type }}</p>
           <p>
             <span>Sunrise:</span
             >{{ weatherSys.sunrise | time | date : "shortTime" }}
