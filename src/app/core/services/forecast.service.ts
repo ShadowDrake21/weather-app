@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { MAIN_ENDPOINT, MAIN_PATH_PART } from '../constants/main.constans';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { IForecast } from '../../shared/models/forecast.model';
 import { Units } from '../../shared/models/generals.model';
 

@@ -1,1 +1,65 @@
-<p>main-screen works!</p>
+<section>
+  <div>
+    <form [formGroup]="searchForm">
+      <input
+        formControlName="cityName"
+        type="text"
+        (input)="onCityNameInput()"
+      />
+    </form>
+    <div>
+      <div *ngIf="weather$$ | async as weather">
+        <p><span>ID:</span> {{ weather.id }}</p>
+        <p><span>City name: </span>{{ weather.name }}</p>
+        <div *ngIf="weather.weather as weatherDescs">
+          <ng-container *ngFor="let weatherDesc of weatherDescs">
+            <p>
+              <span>Description:</span> {{ weatherDesc.description }}
+            </p></ng-container
+          >
+        </div>
+        <div *ngIf="weather.wind as weatherWind">
+          <h3>Wind</h3>
+          <p><span>Degrees:</span> {{ weatherWind.deg }}</p>
+          <p><span>Speed:</span> {{ weatherWind.speed }}</p>
+        </div>
+        <p *ngIf="weather.clouds as weatherClouds">
+          <span>Cloudiness:</span> {{ weatherClouds.all }} %
+        </p>
+        <p><span>Base:</span>{{ weather.base }}</p>
+        <p>
+          <span>Time of data calculation:</span
+          >{{ weather.dt | time | date : "medium" }}
+        </p>
+        <p>
+          <span>Shift in seconds from UTC:</span
+          >{{ weather.timezone | time | date : "medium" }}
+        </p>
+        <p><span>Visibility:</span>{{ weather.visibility }}</p>
+        <div *ngIf="weather.sys as weatherSys">
+          <h3>System parameters:</h3>
+          <p><span>ID:</span>{{ weatherSys.id }}</p>
+          <p><span>Type:</span>{{ weatherSys.type }}</p>
+          <p>
+            <span>Sunrise:</span
+            >{{ weatherSys.sunrise | time | date : "shortTime" }}
+          </p>
+          <p>
+            <span>Sunset:</span
+            >{{ weatherSys.sunset | time | date : "shortTime" }}
+          </p>
+          <p><span>Country:</span>{{ weatherSys.country }}</p>
+        </div>
+        <p><span>Code:</span>{{ weather.cod }}</p>
+        <div *ngIf="weather.main as mainInfo">
+          <p><span>Temperature:</span>{{ mainInfo.temp }}</p>
+          <p><span>Max temperature:</span>{{ mainInfo.temp_max }}</p>
+          <p><span>Min temperature:</span>{{ mainInfo.temp_min }}</p>
+          <p><span>Feels like:</span>{{ mainInfo.feels_like }}</p>
+          <p><span>Humidity:</span>{{ mainInfo.humidity }}</p>
+          <p><span>Pressure:</span>{{ mainInfo.pressure }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

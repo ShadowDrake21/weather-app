@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { MAIN_ENDPOINT } from '../constants/main.constans';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import {
   IGeocoding,
   IGeocodingByZipPost,
