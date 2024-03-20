@@ -11,45 +11,182 @@
       />
     </form>
     <div class="main-screen__info">
-      <div *ngIf="weather$$ | async as weather" class="main-screen__info-list">
-        <p><span>City name: </span>{{ weather.name }}</p>
-        <div *ngIf="weather.weather as weatherDescs">
-          <ng-container *ngFor="let weatherDesc of weatherDescs">
-            <p>
-              <span>Description:</span> {{ weatherDesc.description }}
-            </p></ng-container
+      <div *ngIf="weather$$ | async as weather" class="main-screen__list">
+        <div class="main-screen__info-block">
+          <h3 class="main-screen__info-block__title">Basics</h3>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/city.svg"
+              alt="city"
+            />
+            <span class="main-screen__info-block__item-span">City name: </span
+            >{{ weather.name }}
+          </div>
+          <p
+            *ngIf="weather.sys as weatherSys"
+            class="main-screen__info-block__item"
           >
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/country-flag.svg"
+              alt="country-flag"
+            />
+            <span class="main-screen__info-block__item-span">Country:</span
+            >{{ weatherSys.country }}
+          </p>
+          <div *ngIf="weather.weather as weatherDescs">
+            <ng-container *ngFor="let weatherDesc of weatherDescs">
+              <div class="main-screen__info-block__item">
+                <img
+                  class="main-screen__info-block__item-icon"
+                  src="/assets/icons/description.svg"
+                  alt="description"
+                />
+                <span class="main-screen__info-block__item-span"
+                  >Description:</span
+                >
+                {{ weatherDesc.description }}
+              </div></ng-container
+            >
+          </div>
+          <div *ngIf="weather.clouds as weatherClouds">
+            <div class="main-screen__info-block__item">
+              <img
+                class="main-screen__info-block__item-icon"
+                src="/assets/icons/cloudiness.svg"
+                alt="cloudiness"
+              />
+              <span class="main-screen__info-block__item-span"
+                >Cloudiness:
+              </span>
+              {{ weatherClouds.all }} %
+            </div>
+            <div class="main-screen__info-block__item">
+              <img
+                class="main-screen__info-block__item-icon"
+                src="/assets/icons/date-time.svg"
+                alt="date-time"
+              />
+              <span class="main-screen__info-block__item-span"
+                >Last update: </span
+              >{{ weather.dt | time | date : "short" }}
+            </div>
+          </div>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/visibility.svg"
+              alt="visibility"
+            />
+            <span class="main-screen__info-block__item-span">Visibility: </span
+            >{{ weather.visibility }}
+          </div>
         </div>
-        <div *ngIf="weather.wind as weatherWind">
-          <h3>Wind</h3>
-          <p><span>Degrees:</span> {{ weatherWind.deg }}</p>
-          <p><span>Speed:</span> {{ weatherWind.speed }}</p>
+        <div *ngIf="weather.main as mainInfo" class="main-screen__info-block">
+          <h3 class="main-screen__info-block__title">Main</h3>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/temperature.svg"
+              alt="temperature"
+            />
+            <span class="main-screen__info-block__item-span">Temperature:</span
+            >{{ mainInfo.temp }}
+          </div>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/max-temperature.svg"
+              alt="max-temperature"
+            />
+            <span class="main-screen__info-block__item-span"
+              >Max temperature:</span
+            >{{ mainInfo.temp_max }}
+          </div>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/min-temperature.svg"
+              alt="min-temperature"
+            />
+            <span class="main-screen__info-block__item-span"
+              >Min temperature:</span
+            >{{ mainInfo.temp_min }}
+          </div>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/feels-like.svg"
+              alt="feels-like"
+            />
+            <span class="main-screen__info-block__item-span">Feels like:</span
+            >{{ mainInfo.feels_like }}
+          </div>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/humidity.svg"
+              alt="humidity"
+            />
+            <span class="main-screen__info-block__item-span">Humidity:</span
+            >{{ mainInfo.humidity }}
+          </div>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/atmospheric-pressure.svg"
+              alt="atmospheric-pressure."
+            />
+            <span class="main-screen__info-block__item-span">Pressure:</span
+            >{{ mainInfo.pressure }}
+          </div>
         </div>
-        <p *ngIf="weather.clouds as weatherClouds">
-          <span>Cloudiness:</span> {{ weatherClouds.all }} %
-          <span>Time of data calculation:</span
-          >{{ weather.dt | time | date : "medium" }}
-        </p>
-        <p><span>Visibility:</span>{{ weather.visibility }}</p>
-        <div *ngIf="weather.sys as weatherSys">
-          <p>
-            <span>Sunrise:</span
+        <div
+          *ngIf="weather.wind as weatherWind"
+          class="main-screen__info-block"
+        >
+          <h3 class="main-screen__info-block__title">Wind</h3>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/wind-degrees.svg"
+              alt="wind-degrees"
+            />
+            <span class="main-screen__info-block__item-span">Degrees:</span>
+            {{ weatherWind.deg }}
+          </div>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/wind-speed.svg"
+              alt="wind-speed"
+            />
+            <span class="main-screen__info-block__item-span">Speed:</span>
+            {{ weatherWind.speed }}
+          </div>
+        </div>
+        <div *ngIf="weather.sys as weatherSys" class="main-screen__info-block">
+          <h3 class="main-screen__info-block__title">Sun</h3>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/sunrise.svg"
+              alt="sunrise"
+            />
+            <!-- COMPONENTS!!!!!!!!!!!!! -->
+            <span class="main-screen__info-block__item-span">Sunrise:</span
             >{{ weatherSys.sunrise | time | date : "shortTime" }}
-          </p>
-          <p>
-            <span>Sunset:</span
+          </div>
+          <div class="main-screen__info-block__item">
+            <img
+              class="main-screen__info-block__item-icon"
+              src="/assets/icons/sunset.svg"
+              alt="sunset"
+            />
+            <span class="main-screen__info-block__item-span">Sunset:</span
             >{{ weatherSys.sunset | time | date : "shortTime" }}
-          </p>
-          <p><span>Country:</span>{{ weatherSys.country }}</p>
-        </div>
-        <p><span>Code:</span>{{ weather.cod }}</p>
-        <div *ngIf="weather.main as mainInfo">
-          <p><span>Temperature:</span>{{ mainInfo.temp }}</p>
-          <p><span>Max temperature:</span>{{ mainInfo.temp_max }}</p>
-          <p><span>Min temperature:</span>{{ mainInfo.temp_min }}</p>
-          <p><span>Feels like:</span>{{ mainInfo.feels_like }}</p>
-          <p><span>Humidity:</span>{{ mainInfo.humidity }}</p>
-          <p><span>Pressure:</span>{{ mainInfo.pressure }}</p>
+          </div>
         </div>
       </div>
     </div>

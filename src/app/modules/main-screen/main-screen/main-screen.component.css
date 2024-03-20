@@ -21,6 +21,31 @@
   color: #fff;
 }
 
-.main-screen__info-list {
+.main-screen__list {
   display: flex;
+  gap: 40px;
+}
+
+.main-screen__info-block {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.main-screen__info-block__item {
+  position: relative;
+  padding-left: 30px;
+}
+
+.main-screen__info-block__item-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.main-screen__info-block__title {
+  font-size: 26px;
+  line-height: 30px;
+}
+
+.main-screen__info-block__item-span {
+  font-weight: 700;
 }
