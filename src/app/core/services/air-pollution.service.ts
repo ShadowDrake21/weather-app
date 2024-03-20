@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { MAIN_ENDPOINT, MAIN_PATH_PART } from '../constants/main.constans';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { IAirPollution } from '../../shared/models/airpollution.model';
 
 @Injectable({
