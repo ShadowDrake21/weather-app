@@ -1,4 +1,7 @@
-<section>
+<section
+  class="main-screen__section"
+  [ngStyle]="{ 'background-image': 'url(' + (activePhoto | async)?.url + ')' }"
+>
   <div>
     <form [formGroup]="searchForm">
       <input
