@@ -1,15 +1,26 @@
 <section
   class="main-screen__section"
-  [ngStyle]="{ 'background-image': 'url(' + (activePhoto | async)?.url + ')' }"
+  [ngStyle]="{ 'background-image': 'url(' + (activePhoto$ | async)?.url + ')' }"
 >
   <div class="main-screen__wrapper">
-    <form [formGroup]="searchForm">
+    <form [formGroup]="searchForm" class="main-screen__form">
       <input
+        class="main-screen__form-input"
+        placeholder="Search by a city name"
         formControlName="cityName"
         type="text"
         (input)="onCityNameInput()"
       />
     </form>
+    <div *ngIf="time$ | async as time">
+      <p>{{ time.date }}</p>
+      <p>{{ time.dateTime }}</p>
+      <p>{{ time.day }}</p>
+      <p>{{ time.dayOfWeek }}</p>
+      <p>{{ time.time }}</p>
+      <p>{{ time.timeZone }}</p>
+      <p>{{ time.year }}</p>
+    </div>
     <div class="main-screen__info">
       <app-current-weather [weatherData]="weather$$"></app-current-weather>
     </div>
