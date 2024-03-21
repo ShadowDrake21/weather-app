@@ -24,8 +24,10 @@
 }
 
 .current-weather__info-block__title {
+  text-align: center;
   font-size: 26px;
   line-height: 30px;
+  padding-bottom: 10px;
 }
 
 .current-weather__info-block__item-span {
