@@ -1,0 +1,172 @@
+<div *ngIf="weather$$ | async as weather" class="current-weather__list">
+  <div class="current-weather__info-block">
+    <h3 class="current-weather__info-block__title">Basics</h3>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/city.svg"
+        alt="city"
+      />
+      <span class="current-weather__info-block__item-span">City name:</span
+      >{{ weather.name }}
+    </div>
+    <p
+      *ngIf="weather.sys as weatherSys"
+      class="current-weather__info-block__item"
+    >
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/country-flag.svg"
+        alt="country-flag"
+      />
+      <span class="current-weather__info-block__item-span">Country:</span
+      >{{ weatherSys.country }}
+    </p>
+    <div *ngIf="weather.weather as weatherDescs">
+      <ng-container *ngFor="let weatherDesc of weatherDescs">
+        <div class="current-weather__info-block__item">
+          <img
+            class="current-weather__info-block__item-icon"
+            src="/assets/icons/description.svg"
+            alt="description"
+          />
+          <span class="current-weather__info-block__item-span"
+            >Description:</span
+          >
+          {{ weatherDesc.description | titlecase }}
+        </div></ng-container
+      >
+    </div>
+    <div *ngIf="weather.clouds as weatherClouds">
+      <div class="current-weather__info-block__item">
+        <img
+          class="current-weather__info-block__item-icon"
+          src="/assets/icons/cloudiness.svg"
+          alt="cloudiness"
+        />
+        <span class="current-weather__info-block__item-span">Cloudiness:</span>
+        {{ weatherClouds.all }} %
+      </div>
+      <div class="current-weather__info-block__item">
+        <img
+          class="current-weather__info-block__item-icon"
+          src="/assets/icons/date-time.svg"
+          alt="date-time"
+        />
+        <span class="current-weather__info-block__item-span">Last update: </span
+        >{{ weather.dt | time | date : "short" }}
+      </div>
+    </div>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/visibility.svg"
+        alt="visibility"
+      />
+      <span class="current-weather__info-block__item-span">Visibility:</span
+      >{{ weather.visibility | changeUnitsMeasure : "meter" : "kilometer" }}
+      km
+    </div>
+  </div>
+  <div *ngIf="weather.main as mainInfo" class="current-weather__info-block">
+    <h3 class="current-weather__info-block__title">Main</h3>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/temperature.svg"
+        alt="temperature"
+      />
+      <span class="current-weather__info-block__item-span">Temperature:</span
+      >{{ mainInfo.temp }}&#176;C
+    </div>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/max-temperature.svg"
+        alt="max-temperature"
+      />
+      <span class="current-weather__info-block__item-span"
+        >Max temperature:</span
+      >{{ mainInfo.temp_max }}&#176;C
+    </div>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/min-temperature.svg"
+        alt="min-temperature"
+      />
+      <span class="current-weather__info-block__item-span"
+        >Min temperature:</span
+      >{{ mainInfo.temp_min }}&#176;C
+    </div>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/feels-like.svg"
+        alt="feels-like"
+      />
+      <span class="current-weather__info-block__item-span">Feels like:</span
+      >{{ mainInfo.feels_like }}&#176;C
+    </div>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/humidity.svg"
+        alt="humidity"
+      />
+      <span class="current-weather__info-block__item-span">Humidity:</span
+      >{{ mainInfo.humidity }}%
+    </div>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/atmospheric-pressure.svg"
+        alt="atmospheric-pressure."
+      />
+      <span class="current-weather__info-block__item-span">Pressure:</span
+      >{{ mainInfo.pressure }} hPa
+    </div>
+  </div>
+  <div *ngIf="weather.wind as weatherWind" class="current-weather__info-block">
+    <h3 class="current-weather__info-block__title">Wind</h3>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/wind-degrees.svg"
+        alt="wind-degrees"
+      />
+      <span class="current-weather__info-block__item-span">Degrees:</span>
+      {{ weatherWind.deg }}&#176;
+    </div>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/wind-speed.svg"
+        alt="wind-speed"
+      />
+      <span class="current-weather__info-block__item-span">Speed:</span>
+      {{ weatherWind.speed }} m/s
+    </div>
+  </div>
+  <div *ngIf="weather.sys as weatherSys" class="current-weather__info-block">
+    <h3 class="current-weather__info-block__title">Sun</h3>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/sunrise.svg"
+        alt="sunrise"
+      />
+      <span class="current-weather__info-block__item-span">Sunrise:</span
+      >{{ weatherSys.sunrise | time | date : "shortTime" }}
+    </div>
+    <div class="current-weather__info-block__item">
+      <img
+        class="current-weather__info-block__item-icon"
+        src="/assets/icons/sunset.svg"
+        alt="sunset"
+      />
+      <span class="current-weather__info-block__item-span">Sunset:</span
+      >{{ weatherSys.sunset | time | date : "shortTime" }}
+    </div>
+  </div>
+</div>
