@@ -17,6 +17,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { UnsplashService } from '../../../core/services/unsplash.service';
 import { IPhotoInfo } from '../../../shared/models/photo.model';
 import { shuffleArray } from '../../../shared/utils/arrrays.utils';
+import { GeocodingService } from '../../../core/services/geocoding.service';
+import { TimeService } from '../../../core/services/time.service';
+import { ITime } from '../../../shared/models/time.model';
 
 @Component({
   selector: 'app-main-screen',
@@ -26,6 +29,7 @@ import { shuffleArray } from '../../../shared/utils/arrrays.utils';
 export class MainScreenComponent implements OnInit {
   constructor(
     private weatherService: WeatherService,
+    private timeService: TimeService,
     private unsplashService: UnsplashService
   ) {}
 
@@ -41,10 +45,11 @@ export class MainScreenComponent implements OnInit {
 
   weather$$ = new Subject<IWeatherByNow>();
   photos$$ = new BehaviorSubject<IPhotoInfo[] | null>(null);
-  activePhoto = new Observable<IPhotoInfo | null>();
+  activePhoto$ = new Observable<IPhotoInfo | null>();
+  time$ = new Observable<ITime>();
 
   ngOnInit(): void {
-    this.activePhoto = of(this.initialActivePhoto);
+    this.activePhoto$ = of(this.initialActivePhoto);
   }
 
   public onCityNameInput() {
@@ -62,8 +67,12 @@ export class MainScreenComponent implements OnInit {
         )
       )
       .subscribe({
-        next: (observable) => {
-          this.weather$$.next(observable);
+        next: (resp) => {
+          this.weather$$.next(resp);
+          this.time$ = this.timeService.getCurrentTimeByCoordinantes(
+            resp.coord.lat,
+            resp.coord.lon
+          );
         },
         error: (error) => {
           console.error('Error while fetching weather: ', error);
@@ -76,7 +85,7 @@ export class MainScreenComponent implements OnInit {
       .getPhotos(cityName)
       .subscribe((photos: IPhotoInfo[]) => {
         const shuffledPhotos = shuffleArray(photos);
-        // this.activePhoto = of(this.photos$$.getValue()?.[0]!);
+        // this.activePhoto$ = of(this.photos$$.getValue()?.[0]!);
         this.photos$$.next(shuffledPhotos);
       });
   }
