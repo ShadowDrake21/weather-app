@@ -5,6 +5,7 @@ import { MainScreenRoutingModule } from './main-screen-routing.module';
 import { MainScreenComponent } from './main-screen/main-screen.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TimePipe } from '../../shared/pipes/time.pipe';
+import { ChangeUnitsMeasurePipe } from '../../shared/pipes/change-units-measure.pipe';
 
 @NgModule({
   declarations: [MainScreenComponent],
@@ -13,6 +14,7 @@ import { TimePipe } from '../../shared/pipes/time.pipe';
     MainScreenRoutingModule,
     ReactiveFormsModule,
     TimePipe,
+    ChangeUnitsMeasurePipe,
   ],
 })
 export class MainScreenModule {}

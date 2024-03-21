@@ -33,10 +33,15 @@
 
 .main-screen__info-block__item {
   position: relative;
-  padding-left: 30px;
+  padding-left: 40px;
+  margin-bottom: 15px;
 }
 
 .main-screen__info-block__item-icon {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
   width: 30px;
   height: 30px;
 }
@@ -48,4 +53,5 @@
 
 .main-screen__info-block__item-span {
   font-weight: 700;
+  padding-right: 5px;
 }
