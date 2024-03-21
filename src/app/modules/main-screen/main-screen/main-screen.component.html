@@ -20,7 +20,7 @@
               src="/assets/icons/city.svg"
               alt="city"
             />
-            <span class="main-screen__info-block__item-span">City name: </span
+            <span class="main-screen__info-block__item-span">City name:</span
             >{{ weather.name }}
           </div>
           <p
@@ -46,7 +46,7 @@
                 <span class="main-screen__info-block__item-span"
                   >Description:</span
                 >
-                {{ weatherDesc.description }}
+                {{ weatherDesc.description | titlecase }}
               </div></ng-container
             >
           </div>
@@ -58,8 +58,8 @@
                 alt="cloudiness"
               />
               <span class="main-screen__info-block__item-span"
-                >Cloudiness:
-              </span>
+                >Cloudiness:</span
+              >
               {{ weatherClouds.all }} %
             </div>
             <div class="main-screen__info-block__item">
@@ -79,8 +79,11 @@
               src="/assets/icons/visibility.svg"
               alt="visibility"
             />
-            <span class="main-screen__info-block__item-span">Visibility: </span
-            >{{ weather.visibility }}
+            <span class="main-screen__info-block__item-span">Visibility:</span
+            >{{
+              weather.visibility | changeUnitsMeasure : "meter" : "kilometer"
+            }}
+            km
           </div>
         </div>
         <div *ngIf="weather.main as mainInfo" class="main-screen__info-block">
@@ -92,7 +95,7 @@
               alt="temperature"
             />
             <span class="main-screen__info-block__item-span">Temperature:</span
-            >{{ mainInfo.temp }}
+            >{{ mainInfo.temp }}&#176;C
           </div>
           <div class="main-screen__info-block__item">
             <img
@@ -102,7 +105,7 @@
             />
             <span class="main-screen__info-block__item-span"
               >Max temperature:</span
-            >{{ mainInfo.temp_max }}
+            >{{ mainInfo.temp_max }}&#176;C
           </div>
           <div class="main-screen__info-block__item">
             <img
@@ -112,7 +115,7 @@
             />
             <span class="main-screen__info-block__item-span"
               >Min temperature:</span
-            >{{ mainInfo.temp_min }}
+            >{{ mainInfo.temp_min }}&#176;C
           </div>
           <div class="main-screen__info-block__item">
             <img
@@ -121,7 +124,7 @@
               alt="feels-like"
             />
             <span class="main-screen__info-block__item-span">Feels like:</span
-            >{{ mainInfo.feels_like }}
+            >{{ mainInfo.feels_like }}&#176;C
           </div>
           <div class="main-screen__info-block__item">
             <img
@@ -130,7 +133,7 @@
               alt="humidity"
             />
             <span class="main-screen__info-block__item-span">Humidity:</span
-            >{{ mainInfo.humidity }}
+            >{{ mainInfo.humidity }}%
           </div>
           <div class="main-screen__info-block__item">
             <img
@@ -139,7 +142,7 @@
               alt="atmospheric-pressure."
             />
             <span class="main-screen__info-block__item-span">Pressure:</span
-            >{{ mainInfo.pressure }}
+            >{{ mainInfo.pressure }} hPa
           </div>
         </div>
         <div
@@ -154,7 +157,7 @@
               alt="wind-degrees"
             />
             <span class="main-screen__info-block__item-span">Degrees:</span>
-            {{ weatherWind.deg }}
+            {{ weatherWind.deg }}&#176;
           </div>
           <div class="main-screen__info-block__item">
             <img
@@ -163,7 +166,7 @@
               alt="wind-speed"
             />
             <span class="main-screen__info-block__item-span">Speed:</span>
-            {{ weatherWind.speed }}
+            {{ weatherWind.speed }} m/s
           </div>
         </div>
         <div *ngIf="weather.sys as weatherSys" class="main-screen__info-block">

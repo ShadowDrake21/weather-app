@@ -50,7 +50,7 @@ export class MainScreenComponent implements OnInit {
   public onCityNameInput() {
     this.searchForm.valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         filter(() => !!this.searchForm.value.cityName),
         tap((term) => {
           this.getPhotosByCityName(term.cityName ?? '');
