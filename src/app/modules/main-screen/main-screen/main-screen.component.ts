@@ -11,6 +11,7 @@ import {
   take,
   takeUntil,
   tap,
+  timer,
 } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
@@ -80,19 +81,39 @@ export class MainScreenComponent implements OnInit {
             .getTimezoneByZoneName(timeZone)
             .subscribe((res: any) => {
               this.timezone$ = of(res);
-              console.log(this.timezone$);
-              const utcTime = new Date(
-                new Date().getTime() +
-                  (res.raw_offset - 7200) * 1000 +
-                  res.dst_offset * 1000
+              // console.log(this.timezone$);
+              // const utcTime = new Date(
+              //   new Date().getTime() +
+              //     (res.raw_offset - 7200) * 1000 +
+              //     res.dst_offset * 1000
+              // );
+              const initialDelay = this.calculateInitialDelay();
+              this.time$ = timer(initialDelay, 1000).pipe(
+                map(() =>
+                  this.calculateUpdatedDate(res.raw_offset, res.dst_offset)
+                )
               );
-              this.time$ = of(utcTime);
             });
         },
         error: (error) => {
           console.error('Error while fetching time:', error);
         },
       });
+  }
+
+  private calculateInitialDelay(): number {
+    const currentUTCSeconds = Math.floor(new Date().getTime() / 1000);
+    const initialDelay = 1000 - (currentUTCSeconds % 1000);
+    return initialDelay;
+  }
+
+  private calculateUpdatedDate(rawOffset: number, dstOffset: number): Date {
+    const currentUTCDate = new Date();
+    const totalOffsetMilliseconds = (rawOffset + dstOffset) * 1000;
+    currentUTCDate.setMilliseconds(
+      currentUTCDate.getMilliseconds() - 7200 * 1000 + totalOffsetMilliseconds
+    );
+    return currentUTCDate;
   }
 
   public getPhotosByCityName(cityName: string): void {
