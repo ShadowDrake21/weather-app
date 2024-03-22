@@ -49,9 +49,7 @@ export class WeatherService {
     lang: string = 'en'
   ): Observable<IWeatherByNow> {
     return this.http.get<IWeatherByNow>(
-      `https://corsproxy.io/?${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}weather?id=${Number.parseInt(
-        cityId
-      )}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
+      `https://corsproxy.io/?${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}weather?id=${cityId}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 

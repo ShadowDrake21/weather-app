@@ -17,29 +17,27 @@
         />
         <button type="submit" class="main-screen__form-btn">Search</button>
       </form>
-      <div *ngIf="time$ | async as time" class="main-screen__time">
-        <div class="main-screen__time-item">
-          <span class="main-screen__time-item__span">Time:</span>
-          <h2 class="main-screen__time-item__title time">{{ time.time }}</h2>
-        </div>
-        <div class="main-screen__time-item">
-          <span class="main-screen__time-item__span">Date:</span>
-          <h3 class="main-screen__time-item__title date">
-            {{ time.date | date : "mediumDate" }}
-          </h3>
-        </div>
-        <div class="main-screen__time-item">
-          <span class="main-screen__time-item__span">Day of week:</span>
-          <h4 class="main-screen__time-item__title day">
-            {{ time.dayOfWeek }}
-          </h4>
-        </div>
-        <div class="main-screen__time-item">
-          <span class="main-screen__time-item__span">Timezone:</span>
-          <h5 class="main-screen__time-item__title timezone">
-            {{ time.timeZone }}
-          </h5>
-        </div>
+      <div *ngIf="timezone$ | async as timezone" class="main-screen__time">
+        <ng-container *ngIf="time$ | async as time">
+          <div class="main-screen__time-item">
+            <span class="main-screen__time-item__span">Time:</span>
+            <h2 class="main-screen__time-item__title time">
+              {{ time | date : "HH:mm:ss" }}
+            </h2>
+          </div>
+          <div class="main-screen__time-item">
+            <span class="main-screen__time-item__span">Date:</span>
+            <h3 class="main-screen__time-item__title date">
+              {{ time | date : "mediumDate" }}
+            </h3>
+          </div>
+          <div class="main-screen__time-item">
+            <span class="main-screen__time-item__span">Timezone:</span>
+            <h4 class="main-screen__time-item__title timezone">
+              {{ timezone.timezone }}
+            </h4>
+          </div>
+        </ng-container>
       </div>
     </div>
     <div class="main-screen__info">

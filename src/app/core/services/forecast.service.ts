@@ -43,14 +43,12 @@ export class ForecastService {
   }
 
   public getFiveDaysForecastByCityID(
-    cityId: string,
+    cityId: number,
     units: Units = 'metric',
     lang: string = 'en'
   ): Observable<IForecast> {
     return this.http.get<IForecast>(
-      `${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}forecast?id=${Number.parseInt(
-        cityId
-      )}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
+      `${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}forecast?id=${cityId}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 

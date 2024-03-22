@@ -22,7 +22,7 @@ import { IPhotoInfo } from '../../../shared/models/photo.model';
 import { shuffleArray } from '../../../shared/utils/arrrays.utils';
 import { GeocodingService } from '../../../core/services/geocoding.service';
 import { TimeService } from '../../../core/services/time.service';
-import { ITime } from '../../../shared/models/time.model';
+import { ITime, ITimezone } from '../../../shared/models/time.model';
 
 @Component({
   selector: 'app-main-screen',
@@ -49,7 +49,8 @@ export class MainScreenComponent implements OnInit {
   weather$$ = new Subject<IWeatherByNow>();
   photos$$ = new BehaviorSubject<IPhotoInfo[] | null>(null);
   activePhoto$ = new Observable<IPhotoInfo | null>();
-  time$ = new Observable<ITime>();
+  timezone$ = new Observable<ITimezone>();
+  time$ = new Observable<Date>();
 
   ngOnInit(): void {
     this.activePhoto$ = of(this.initialActivePhoto);
@@ -62,7 +63,9 @@ export class MainScreenComponent implements OnInit {
       .getCurrentWeatherByName(this.searchForm.value.cityName)
 
       .subscribe((weather) => {
+        console.log(weather);
         this.weather$$.next(weather);
+
         this.getCityTime(weather.coord.lat, weather.coord.lon);
         // this.getPhotosByCityName(weather.name);
       });
@@ -72,8 +75,19 @@ export class MainScreenComponent implements OnInit {
     this.timeService
       .getCurrentTimeByCoordinantes(latitude, longitude)
       .subscribe({
-        next: (time) => {
-          this.time$ = of(time);
+        next: ({ timeZone }) => {
+          this.timeService
+            .getTimezoneByZoneName(timeZone)
+            .subscribe((res: any) => {
+              this.timezone$ = of(res);
+              console.log(this.timezone$);
+              const utcTime = new Date(
+                new Date().getTime() +
+                  (res.raw_offset - 7200) * 1000 +
+                  res.dst_offset * 1000
+              );
+              this.time$ = of(utcTime);
+            });
         },
         error: (error) => {
           console.error('Error while fetching time:', error);

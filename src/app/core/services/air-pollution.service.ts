@@ -40,9 +40,7 @@ export class AirPollutionService {
     end: string
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
-      `${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/history?lat=${lat}&lon=${lon}&start=${Number.parseInt(
-        start
-      )}&end=${Number.parseInt(end)}&appid=${environment.weatherApiKey}`
+      `${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${environment.weatherApiKey}`
     );
   }
 }
