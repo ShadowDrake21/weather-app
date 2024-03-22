@@ -1,15 +1,18 @@
 import {
   BehaviorSubject,
   debounceTime,
+  distinctUntilChanged,
   filter,
   map,
   Observable,
   of,
   Subject,
   switchMap,
+  take,
+  takeUntil,
   tap,
 } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { WeatherService } from '../../../core/services/weather.service';
 import { IWeatherByNow } from '../../../shared/models/weather.model';
@@ -52,30 +55,28 @@ export class MainScreenComponent implements OnInit {
     this.activePhoto$ = of(this.initialActivePhoto);
   }
 
-  public onCityNameInput() {
-    this.searchForm.valueChanges
-      .pipe(
-        debounceTime(1000),
-        filter(() => !!this.searchForm.value.cityName),
-        tap((term) => {
-          this.getPhotosByCityName(term.cityName ?? '');
-        }),
-        switchMap(() =>
-          this.weatherService.getCurrentWeatherByName(
-            this.searchForm.value.cityName ?? ''
-          )
-        )
-      )
+  public onCityNameSubmit() {
+    if (!this.searchForm.value.cityName) return;
+
+    this.weatherService
+      .getCurrentWeatherByName(this.searchForm.value.cityName)
+
+      .subscribe((weather) => {
+        this.weather$$.next(weather);
+        this.getCityTime(weather.coord.lat, weather.coord.lon);
+        // this.getPhotosByCityName(weather.name);
+      });
+  }
+
+  public getCityTime(latitude: number, longitude: number) {
+    this.timeService
+      .getCurrentTimeByCoordinantes(latitude, longitude)
       .subscribe({
-        next: (resp) => {
-          this.weather$$.next(resp);
-          this.time$ = this.timeService.getCurrentTimeByCoordinantes(
-            resp.coord.lat,
-            resp.coord.lon
-          );
+        next: (time) => {
+          this.time$ = of(time);
         },
         error: (error) => {
-          console.error('Error while fetching weather: ', error);
+          console.error('Error while fetching time:', error);
         },
       });
   }
@@ -85,8 +86,8 @@ export class MainScreenComponent implements OnInit {
       .getPhotos(cityName)
       .subscribe((photos: IPhotoInfo[]) => {
         const shuffledPhotos = shuffleArray(photos);
-        // this.activePhoto$ = of(this.photos$$.getValue()?.[0]!);
         this.photos$$.next(shuffledPhotos);
+        this.activePhoto$ = of(this.photos$$.getValue()?.[0]!);
       });
   }
 }
