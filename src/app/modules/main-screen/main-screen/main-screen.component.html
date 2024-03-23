@@ -41,7 +41,14 @@
       </div>
     </div>
     <div class="main-screen__info">
-      <app-current-weather [weatherData]="weather$$"></app-current-weather>
+      <div class="container">
+        <div class="main-screen__info-inner">
+          <app-current-weather [weatherData]="weather$$"></app-current-weather>
+          <app-current-air-pollution
+            [airPollutionData]="airPollution$$"
+          ></app-current-air-pollution>
+        </div>
+      </div>
     </div>
   </div>
 </section>

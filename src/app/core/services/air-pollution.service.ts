@@ -20,7 +20,7 @@ export class AirPollutionService {
     lon: number
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
-      `${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
+      `https://corsproxy.io/?${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
     );
   }
 
