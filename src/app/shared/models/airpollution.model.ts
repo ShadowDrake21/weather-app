@@ -1,19 +1,19 @@
 export interface IAirPollution {
   coord: number[];
-  list: AirPollutinList[];
+  list: IAirPollutionList[];
 }
 
-export interface AirPollutinList {
+export interface IAirPollutionList {
   dt: number;
   main: Main;
-  components: AirPollutinComponents;
+  components: AirPollutionComponents;
 }
 
 export interface Main {
   aqi: number;
 }
 
-export interface AirPollutinComponents {
+export interface AirPollutionComponents {
   co: number;
   no: number;
   no2: number;

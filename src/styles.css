@@ -9,7 +9,15 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+p {
+  padding: 0;
+  margin: 0;
+}
+
+ul,
+li {
+  list-style: none;
   padding: 0;
   margin: 0;
 }
@@ -24,4 +32,10 @@ body {
 .body {
   max-height: 100vh;
   height: 100%;
+}
+
+.container {
+  max-width: 1670px;
+  padding: 0 15px;
+  margin: auto;
 }

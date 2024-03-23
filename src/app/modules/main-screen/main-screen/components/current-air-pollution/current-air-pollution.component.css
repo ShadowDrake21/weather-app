@@ -1,0 +1,59 @@
+.current__air-pollution {
+  max-width: 700px;
+  width: 100%;
+}
+
+.current__air-pollution__info {
+}
+
+.current__air-pollution__info-title {
+  text-align: center;
+  font-size: 26px;
+  line-height: 30px;
+  padding-bottom: 10px;
+}
+
+.current__air-pollution__info-quality {
+}
+
+.current__air-pollution__info-title {
+}
+
+.current__air-pollution__info-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px 25px;
+}
+
+.current__air-pollution__info-list__item {
+  text-align: center;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.current__air-pollution__info-list__item-span {
+  font-weight: 700;
+}
+
+.current__air-pollution__info-list__item-value {
+}
+
+.current__air-pollution__info-title.good {
+  color: rgb(30, 255, 0);
+}
+.current__air-pollution__info-title.fair {
+  color: rgb(193, 255, 143);
+}
+.current__air-pollution__info-title.moderate {
+  color: rgb(255, 251, 0);
+}
+.current__air-pollution__info-title.poor {
+  color: rgb(255, 0, 0);
+}
+.current__air-pollution__info-title.very-poor {
+  color: rgb(97, 0, 0);
+}
+.current__air-pollution__info-title.unknown {
+  color: white;
+}

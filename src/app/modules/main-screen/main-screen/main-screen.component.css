@@ -92,10 +92,18 @@
 }
 
 .main-screen__info {
-  width: 100%;
-  min-height: 400px;
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
+  width: 100%;
+  min-height: 400px;
+  padding: 25px 0;
+}
+
+.main-screen__info-inner {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .main-screen__form-btn {

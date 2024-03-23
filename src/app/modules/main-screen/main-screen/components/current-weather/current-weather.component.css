@@ -1,6 +1,6 @@
 .current-weather__list {
   display: flex;
-  gap: 40px;
+  gap: 30px;
 }
 
 .current-weather__info-block {
@@ -11,7 +11,7 @@
 .current-weather__info-block__item {
   position: relative;
   padding-left: 40px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .current-weather__info-block__item-icon {

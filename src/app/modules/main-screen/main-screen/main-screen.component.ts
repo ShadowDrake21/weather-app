@@ -1,16 +1,11 @@
 import {
   BehaviorSubject,
-  debounceTime,
-  distinctUntilChanged,
-  filter,
   map,
   Observable,
   of,
   Subject,
-  switchMap,
+  Subscription,
   take,
-  takeUntil,
-  tap,
   timer,
 } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -24,6 +19,11 @@ import { shuffleArray } from '../../../shared/utils/arrrays.utils';
 import { GeocodingService } from '../../../core/services/geocoding.service';
 import { TimeService } from '../../../core/services/time.service';
 import { ITime, ITimezone } from '../../../shared/models/time.model';
+import { AirPollutionService } from '../../../core/services/air-pollution.service';
+import {
+  IAirPollution,
+  IAirPollutionList,
+} from '../../../shared/models/airpollution.model';
 
 @Component({
   selector: 'app-main-screen',
@@ -33,6 +33,7 @@ import { ITime, ITimezone } from '../../../shared/models/time.model';
 export class MainScreenComponent implements OnInit {
   constructor(
     private weatherService: WeatherService,
+    private airPollutionService: AirPollutionService,
     private timeService: TimeService,
     private unsplashService: UnsplashService
   ) {}
@@ -46,8 +47,8 @@ export class MainScreenComponent implements OnInit {
     url: 'https://images.unsplash.com/photo-1629814696209-4f4faf2ab874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODEyOTZ8MHwxfHNlYXJjaHw5fHxLcmFrJUMzJUIzd3xlbnwwfHx8fDE3MTA5NDY3Njd8MA&ixlib=rb-4.0.3&q=80&w=1080',
     title: 'Welcome!',
   };
-
   weather$$ = new Subject<IWeatherByNow>();
+  airPollution$$ = new Subject<IAirPollutionList[]>();
   photos$$ = new BehaviorSubject<IPhotoInfo[] | null>(null);
   activePhoto$ = new Observable<IPhotoInfo | null>();
   timezone$ = new Observable<ITimezone>();
@@ -62,12 +63,11 @@ export class MainScreenComponent implements OnInit {
 
     this.weatherService
       .getCurrentWeatherByName(this.searchForm.value.cityName)
-
       .subscribe((weather) => {
         console.log(weather);
         this.weather$$.next(weather);
-
         this.getCityTime(weather.coord.lat, weather.coord.lon);
+        this.getCurrentAirPollution(weather.coord.lat, weather.coord.lon);
         // this.getPhotosByCityName(weather.name);
       });
   }
@@ -81,12 +81,6 @@ export class MainScreenComponent implements OnInit {
             .getTimezoneByZoneName(timeZone)
             .subscribe((res: any) => {
               this.timezone$ = of(res);
-              // console.log(this.timezone$);
-              // const utcTime = new Date(
-              //   new Date().getTime() +
-              //     (res.raw_offset - 7200) * 1000 +
-              //     res.dst_offset * 1000
-              // );
               const initialDelay = this.calculateInitialDelay();
               this.time$ = timer(initialDelay, 1000).pipe(
                 map(() =>
@@ -98,6 +92,19 @@ export class MainScreenComponent implements OnInit {
         error: (error) => {
           console.error('Error while fetching time:', error);
         },
+      });
+  }
+
+  public getCurrentAirPollution(latitude: number, longitude: number) {
+    this.airPollutionService
+      .getCurrentAirPollutionData(latitude, longitude)
+      .pipe(
+        map((data) => {
+          return data.list;
+        })
+      )
+      .subscribe((list) => {
+        this.airPollution$$.next(list);
       });
   }
 
