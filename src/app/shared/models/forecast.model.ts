@@ -2,11 +2,11 @@ export interface IForecast {
   cod: string;
   message: number;
   cnt: number;
-  list: ForecastPoint[];
+  list: IForecastPoint[];
   city: City;
 }
 
-export interface ForecastPoint {
+export interface IForecastPoint {
   dt: number;
   main: MainInfo;
   weather: Weather[];
