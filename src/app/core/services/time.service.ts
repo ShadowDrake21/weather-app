@@ -8,6 +8,7 @@ import {
   MAIN_WORLDTIME_ENDPOINT,
 } from '../constants/time.constants';
 import { ITime } from '../../shared/models/time.model';
+import { MAIN_CORS_ENDPOINT } from '../constants/cors.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -19,13 +20,13 @@ export class TimeService {
     latitude: number,
     longitude: number
   ): Observable<ITime> {
-    const url = `https://corsproxy.io/?${MAIN_TIME_ENDPOINT}${MAIN_CURRENT_PATH_PART}?latitude=${latitude}&longitude=${longitude}`;
+    const url = `${MAIN_CORS_ENDPOINT}${MAIN_TIME_ENDPOINT}${MAIN_CURRENT_PATH_PART}?latitude=${latitude}&longitude=${longitude}`;
 
     return this.http.get<ITime>(url);
   }
 
   public getTimezoneByZoneName(zoneName: string) {
-    const url = `https://corsproxy.io/?${MAIN_WORLDTIME_ENDPOINT}${zoneName}`;
+    const url = `${MAIN_CORS_ENDPOINT}${MAIN_WORLDTIME_ENDPOINT}${zoneName}`;
     return this.http.get(url);
   }
 }
