@@ -1,6 +1,6 @@
 export interface IGeocoding {
   name: string;
-  local_names?: LocalNames;
+  local_names?: ILocalNames;
   lat: number;
   lon: number;
   country: string;
@@ -15,7 +15,7 @@ export interface IGeocodingByZipPost {
   country: string;
 }
 
-export interface LocalNames {
+export interface ILocalNames {
   ms?: string;
   gu?: string;
   is?: string;
@@ -167,4 +167,9 @@ export interface LocalNames {
   oj?: string;
   cr?: string;
   iu?: string;
+}
+
+export interface ICityCoords {
+  lat: number;
+  lon: number;
 }
