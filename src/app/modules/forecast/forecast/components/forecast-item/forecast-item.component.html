@@ -1,0 +1,59 @@
+<div *ngIf="forecastPoint$ | async as forecast">
+  <div>{{ forecast.dt_txt | date : "medium" }}</div>
+  <div><span>Cloudiness:</span>{{ forecast.clouds.all }}%</div>
+  <div>
+    <span>Visibility:</span
+    >{{ forecast.visibility | changeUnitsMeasure : "meter" : "kilometer" }}
+  </div>
+  <div>
+    <span> Part of the day: </span>
+    {{ forecast.sys.pod === "d" ? "day" : "night" }}
+  </div>
+  <div>
+    <span> Probability of precipitation: </span>
+    {{ forecast.pop }}%
+  </div>
+  <div *ngIf="forecast.main as main">
+    <div>
+      <span>Temperature:</span>
+      {{ main.temp }}
+    </div>
+    <div>
+      <span>Max temperature:</span>
+      {{ main.temp_max }}
+    </div>
+    <div>
+      <span>Min emperature:</span>
+      {{ main.temp_min }}
+    </div>
+    <div>
+      <span>Feels like:</span>
+      {{ main.feels_like }}
+    </div>
+    <div>
+      <span>Pressure:</span>
+      {{ main.pressure }}
+    </div>
+    <div>
+      <span>Humidity:</span>
+      {{ main.humidity }}
+    </div>
+    <div>
+      <span>Atmospheric pressure on the sea level:</span>
+      {{ main.sea_level }}
+    </div>
+    <div>
+      <span>Atmospheric pressure on the ground level:</span>
+      {{ main.grnd_level }}
+    </div>
+  </div>
+  <div *ngIf="forecast.wind as wind">
+    <div><span>Degrees:</span>{{ wind.deg }}</div>
+    <div><span>Speed:</span>{{ wind.speed }}</div>
+    <div><span>Wind gust:</span>{{ wind.gust }}</div>
+  </div>
+  <div *ngIf="forecast.weather[0] as weather">
+    <div><span>Main:</span>{{ weather.main }}</div>
+    <div><span>Description:</span>{{ weather.description }}</div>
+  </div>
+</div>
