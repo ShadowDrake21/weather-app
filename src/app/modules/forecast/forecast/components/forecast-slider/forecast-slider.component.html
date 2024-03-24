@@ -1,0 +1,3 @@
+<div class="items" [ngClass]="{ active: active$ | async }" #items>
+  <div *ngFor="let index of panels" class="item">{{ index }}</div>
+</div>
