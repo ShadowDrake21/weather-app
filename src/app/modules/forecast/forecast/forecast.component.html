@@ -3,7 +3,11 @@
   [ngStyle]="{ 'background-image': 'url(' + (queryBgPath$ | async) + ')' }"
 >
   <h1>City: {{ queryCityName$ | async }}</h1>
-  <div *ngIf="cityForecast$ | async as forecasts">
+  <div *ngIf="cityForecast$ | async as forecasts" class="forecast-list">
     <app-forecast-item [item]="forecasts.list[0]"></app-forecast-item>
+    <app-forecast-item [item]="forecasts.list[1]"></app-forecast-item>
+    <app-forecast-item [item]="forecasts.list[2]"></app-forecast-item>
+    <app-forecast-item [item]="forecasts.list[3]"></app-forecast-item>
   </div>
+  <app-forecast-slider></app-forecast-slider>
 </section>
