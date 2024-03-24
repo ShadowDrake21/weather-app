@@ -9,6 +9,7 @@ import { ChangeUnitsMeasurePipe } from '../../shared/pipes/change-units-measure.
 import { CurrentWeatherComponent } from './main-screen/components/current-weather/current-weather.component';
 import { CurrentAirPollutionComponent } from './main-screen/components/current-air-pollution/current-air-pollution.component';
 import { TruncateTextPipe } from '../../shared/pipes/truncate-text.pipe';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { TruncateTextPipe } from '../../shared/pipes/truncate-text.pipe';
     TimePipe,
     ChangeUnitsMeasurePipe,
     TruncateTextPipe,
+    RouterModule,
   ],
 })
 export class MainScreenModule {}

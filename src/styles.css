@@ -40,6 +40,15 @@ body {
   margin: auto;
 }
 
+.section {
+  min-height: 100vh;
+  height: 100%;
+  background-image: url("/assets/background-img.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
 .error {
   text-align: center;
   padding: 15px 20px;

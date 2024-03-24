@@ -1,12 +1,3 @@
-.main-screen__section {
-  min-height: 100vh;
-  height: 100%;
-  background-image: url("/assets/background-img.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
 .main-screen__wrapper {
   display: flex;
   justify-content: space-between;

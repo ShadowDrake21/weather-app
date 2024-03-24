@@ -1,0 +1,6 @@
+<section
+  class="section forecast"
+  [ngStyle]="{ 'background-image': 'url(' + (queryBgPath$ | async) + ')' }"
+>
+  <h1>City: {{ queryCityName$ | async }}</h1>
+</section>

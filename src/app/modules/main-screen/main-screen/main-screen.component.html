@@ -1,5 +1,5 @@
 <section
-  class="main-screen__section"
+  class="section main-screen__section"
   [ngStyle]="{ 'background-image': 'url(' + (activePhoto$ | async)?.url + ')' }"
 >
   <div class="main-screen__wrapper">
@@ -9,8 +9,14 @@
         class="main-screen__top-info"
       >
         <h2 class="main-screen__top-info__title">
-          {{ "Welcome!" | truncateText : 50 }}
+          {{ (weather$$ | async)?.name ?? "Welcome!" | truncateText : 50 }}
         </h2>
+        <a
+          *ngIf="weather$$ | async as weather"
+          [routerLink]="['/forecast']"
+          [queryParams]="{ city: weather?.name, bg: (photos$$ | async)?.[0]?.url}"
+          >Go to 5 days forecast</a
+        >
       </div>
       <div class="main-screen__top-search">
         <form
