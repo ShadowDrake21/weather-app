@@ -1,1 +1,120 @@
-<p>main-screen works!</p>
+<section
+  class="main-screen__section"
+  [ngStyle]="{ 'background-image': 'url(' + (activePhoto$ | async)?.url + ')' }"
+>
+  <div class="main-screen__wrapper">
+    <div class="main-screen__top">
+      <div
+        *ngIf="activePhoto$ | async as activePhoto"
+        class="main-screen__top-info"
+      >
+        <h2 class="main-screen__top-info__title">
+          {{ "Welcome!" | truncateText : 50 }}
+        </h2>
+      </div>
+      <div class="main-screen__top-search">
+        <form
+          [formGroup]="searchForm"
+          class="main-screen__form"
+          (ngSubmit)="onCityNameSubmit()"
+        >
+          <input
+            class="main-screen__form-input"
+            placeholder="Search by a city name"
+            formControlName="cityName"
+            type="text"
+          />
+          <button
+            type="submit"
+            class="main-screen__form-btn"
+            [disabled]="isBtnDisabled()"
+          >
+            Search
+          </button>
+        </form>
+        <div
+          *ngIf="timezone$ | async as timezone; else timeError"
+          class="main-screen__time"
+        >
+          <ng-container *ngIf="time$ | async as time">
+            <div class="main-screen__time-item">
+              <span class="main-screen__time-item__span">Time:</span>
+              <h2 class="main-screen__time-item__title time">
+                {{ time | date : "HH:mm:ss" }}
+              </h2>
+            </div>
+            <div class="main-screen__time-item">
+              <span class="main-screen__time-item__span">Date:</span>
+              <h3 class="main-screen__time-item__title date">
+                {{ time | date : "mediumDate" }}
+              </h3>
+            </div>
+            <div class="main-screen__time-item">
+              <span class="main-screen__time-item__span">Timezone:</span>
+              <h4 class="main-screen__time-item__title timezone">
+                {{ timezone.timezone }}
+              </h4>
+            </div>
+          </ng-container>
+        </div>
+        <ng-template #timeError>
+          <div *ngIf="timeError$ | async as error" class="error">
+            <p class="error__message">
+              <span class="error__name"
+                >{{ error.name | truncateText : 20 }}:</span
+              >{{ error.message | truncateText : 35 }}
+            </p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div class="main-screen__info">
+      <div class="container">
+        <div
+          *ngIf="detailedInfoError$ | async as error"
+          class="main-screen__info-error error"
+        >
+          <p class="error__message">
+            <span class="error__name">{{ error.name }}:</span
+            >{{ error.message }}
+          </p>
+          <button class="error-reset__btn" type="button" (click)="onReset()">
+            Reset
+          </button>
+        </div>
+        <div class="main-screen__info-inner">
+          <div *ngIf="(weather$$ | async) !== null; else weatherError">
+            <app-current-weather
+              [weatherData]="weather$$"
+            ></app-current-weather>
+          </div>
+          <ng-template #weatherError>
+            <div *ngIf="weatherError$ | async as error" class="error">
+              <p class="error__message">
+                <span class="error__name"
+                  >{{ error.name | truncateText : 20 }}:</span
+                >{{ error.message | truncateText : 35 }}
+              </p>
+            </div>
+          </ng-template>
+          <div
+            *ngIf="(airPollution$$ | async) !== null; else airPollutionError"
+          >
+            <app-current-air-pollution
+              [airPollutionData]="airPollution$$"
+            ></app-current-air-pollution>
+          </div>
+          <ng-template #airPollutionError>
+            <div *ngIf="airPolutionError$ | async as error" class="error">
+              <p class="error__message">
+                <span class="error__name"
+                  >{{ error.name | truncateText : 20 }}:</span
+                >{{ error.message | truncateText : 35 }}
+              </p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,36 @@
+.current-weather__list {
+  display: flex;
+  gap: 30px;
+}
+
+.current-weather__info-block {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.current-weather__info-block__item {
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 25px;
+}
+
+.current-weather__info-block__item-icon {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+}
+
+.current-weather__info-block__title {
+  text-align: center;
+  font-size: 26px;
+  line-height: 30px;
+  padding-bottom: 10px;
+}
+
+.current-weather__info-block__item-span {
+  font-weight: 700;
+  padding-right: 5px;
+}
