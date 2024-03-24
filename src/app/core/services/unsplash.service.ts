@@ -1,8 +1,9 @@
+import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { MAIN_PHOTOS_ENDPOINT } from '../constants/unsplash.constants';
 import { environment } from '../../../environments/environment.development';
-import { map, Observable } from 'rxjs';
 import { IPhotoInfo } from '../../shared/models/photo.model';
 
 @Injectable({
@@ -27,9 +28,9 @@ export class UnsplashService {
   }
 
   private extractPhotoInfo(results: any[]): IPhotoInfo[] {
+    console.log('extract', results);
     return results.map((result) => ({
       url: result.urls.regular,
-      title: result.title,
       orientation: 'landscape',
     }));
   }

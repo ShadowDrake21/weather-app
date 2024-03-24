@@ -10,5 +10,5 @@ import { IWeatherByNow } from '../../../../../shared/models/weather.model';
 })
 export class CurrentWeatherComponent {
   @Input({ required: true, alias: 'weatherData' }) weather$$ =
-    new Subject<IWeatherByNow>();
+    new Subject<IWeatherByNow | null>();
 }

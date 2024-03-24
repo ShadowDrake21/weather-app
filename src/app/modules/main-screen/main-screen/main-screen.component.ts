@@ -1,14 +1,13 @@
 import {
   BehaviorSubject,
+  catchError,
   map,
   Observable,
   of,
   Subject,
-  Subscription,
-  take,
   timer,
 } from 'rxjs';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { WeatherService } from '../../../core/services/weather.service';
 import { IWeatherByNow } from '../../../shared/models/weather.model';
@@ -16,14 +15,16 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { UnsplashService } from '../../../core/services/unsplash.service';
 import { IPhotoInfo } from '../../../shared/models/photo.model';
 import { shuffleArray } from '../../../shared/utils/arrrays.utils';
-import { GeocodingService } from '../../../core/services/geocoding.service';
 import { TimeService } from '../../../core/services/time.service';
-import { ITime, ITimezone } from '../../../shared/models/time.model';
+import { ITimezone } from '../../../shared/models/time.model';
 import { AirPollutionService } from '../../../core/services/air-pollution.service';
+import { IAirPollutionList } from '../../../shared/models/airpollution.model';
+import { IHttpError } from '../../../shared/models/error.model';
 import {
-  IAirPollution,
-  IAirPollutionList,
-} from '../../../shared/models/airpollution.model';
+  calculateInitialDelay,
+  calculateUpdatedDate,
+} from '../../../shared/utils/dateAndTime.utils';
+import { getErrorObject } from '../../../shared/utils/errorHandling.utils';
 
 @Component({
   selector: 'app-main-screen',
@@ -43,16 +44,25 @@ export class MainScreenComponent implements OnInit {
   });
 
   initialActivePhoto: IPhotoInfo = {
-    // url: '/assets/background-img.jpg',
-    url: 'https://images.unsplash.com/photo-1629814696209-4f4faf2ab874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODEyOTZ8MHwxfHNlYXJjaHw5fHxLcmFrJUMzJUIzd3xlbnwwfHx8fDE3MTA5NDY3Njd8MA&ixlib=rb-4.0.3&q=80&w=1080',
-    title: 'Welcome!',
+    url: '/assets/background-img.jpg',
+    // url: 'https://images.unsplash.com/photo-1629814696209-4f4faf2ab874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODEyOTZ8MHwxfHNlYXJjaHw5fHxLcmFrJUMzJUIzd3xlbnwwfHx8fDE3MTA5NDY3Njd8MA&ixlib=rb-4.0.3&q=80&w=1080',
+    orientation: 'landscape',
   };
-  weather$$ = new Subject<IWeatherByNow>();
-  airPollution$$ = new Subject<IAirPollutionList[]>();
+
+  detailedInfoError$ = new Observable<IHttpError | null>();
+
+  weather$$ = new BehaviorSubject<IWeatherByNow | null>(null);
+  weatherError$ = new Observable<IHttpError>();
+
+  airPollution$$ = new BehaviorSubject<IAirPollutionList[] | null>(null);
+  airPolutionError$ = new Observable<IHttpError>();
+
   photos$$ = new BehaviorSubject<IPhotoInfo[] | null>(null);
   activePhoto$ = new Observable<IPhotoInfo | null>();
-  timezone$ = new Observable<ITimezone>();
-  time$ = new Observable<Date>();
+
+  timezone$ = new Observable<ITimezone | null>();
+  time$ = new Observable<Date | null>();
+  timeError$ = new Observable<IHttpError | null>();
 
   ngOnInit(): void {
     this.activePhoto$ = of(this.initialActivePhoto);
@@ -61,15 +71,49 @@ export class MainScreenComponent implements OnInit {
   public onCityNameSubmit() {
     if (!this.searchForm.value.cityName) return;
 
+    if (this.weather$$) {
+      this.weather$$.next(null);
+    }
+    if (this.airPollution$$) {
+      this.airPollution$$.next(null);
+    }
+
     this.weatherService
       .getCurrentWeatherByName(this.searchForm.value.cityName)
-      .subscribe((weather) => {
-        console.log(weather);
-        this.weather$$.next(weather);
-        this.getCityTime(weather.coord.lat, weather.coord.lon);
-        this.getCurrentAirPollution(weather.coord.lat, weather.coord.lon);
-        // this.getPhotosByCityName(weather.name);
+      .pipe(
+        catchError((error) => {
+          this.catchErrorByIncorrectName(error);
+          return of(null);
+        })
+      )
+      .subscribe({
+        next: (weather) => {
+          if (!weather) return;
+          this.weather$$.next(weather);
+          this.getCityTime(weather.coord.lat, weather.coord.lon);
+          this.getCurrentAirPollution(weather.coord.lat, weather.coord.lon);
+          this.getPhotosByCityName(weather.name);
+        },
+        error: (error) => {
+          this.weatherError$ = of(
+            getErrorObject(error.name, error.error.message)
+          );
+        },
       });
+  }
+
+  private catchErrorByIncorrectName(error: any) {
+    this.detailedInfoError$ = of(
+      getErrorObject(
+        'Weather and air pollution ' + error.name,
+        error.error.message
+      )
+    );
+    this.time$ = of(null);
+    this.timezone$ = of(null);
+    this.activePhoto$ = of(this.initialActivePhoto);
+    this.timeError$ = of(getErrorObject(error.name, error.error.message));
+    this.searchForm.disable();
   }
 
   public getCityTime(latitude: number, longitude: number) {
@@ -81,16 +125,18 @@ export class MainScreenComponent implements OnInit {
             .getTimezoneByZoneName(timeZone)
             .subscribe((res: any) => {
               this.timezone$ = of(res);
-              const initialDelay = this.calculateInitialDelay();
+              const initialDelay = calculateInitialDelay();
               this.time$ = timer(initialDelay, 1000).pipe(
-                map(() =>
-                  this.calculateUpdatedDate(res.raw_offset, res.dst_offset)
-                )
+                map(() => calculateUpdatedDate(res.raw_offset, res.dst_offset))
               );
             });
         },
         error: (error) => {
-          console.error('Error while fetching time:', error);
+          const errorObj: IHttpError = {
+            name: error.name,
+            message: error.error,
+          };
+          this.timeError$ = of(errorObj);
         },
       });
   }
@@ -99,28 +145,28 @@ export class MainScreenComponent implements OnInit {
     this.airPollutionService
       .getCurrentAirPollutionData(latitude, longitude)
       .pipe(
+        catchError((error) => {
+          this.airPolutionError$ = of(
+            getErrorObject(error.name, error.error.message)
+          );
+          return of(null);
+        }),
         map((data) => {
-          return data.list;
+          return data!.list;
         })
       )
-      .subscribe((list) => {
-        this.airPollution$$.next(list);
+      .subscribe({
+        next: (list) => {
+          this.airPollution$$.next(list);
+        },
+        error: (error) => {
+          const errorObj: IHttpError = {
+            name: error.name,
+            message: error.error.message,
+          };
+          this.airPolutionError$ = of(errorObj);
+        },
       });
-  }
-
-  private calculateInitialDelay(): number {
-    const currentUTCSeconds = Math.floor(new Date().getTime() / 1000);
-    const initialDelay = 1000 - (currentUTCSeconds % 1000);
-    return initialDelay;
-  }
-
-  private calculateUpdatedDate(rawOffset: number, dstOffset: number): Date {
-    const currentUTCDate = new Date();
-    const totalOffsetMilliseconds = (rawOffset + dstOffset) * 1000;
-    currentUTCDate.setMilliseconds(
-      currentUTCDate.getMilliseconds() - 7200 * 1000 + totalOffsetMilliseconds
-    );
-    return currentUTCDate;
   }
 
   public getPhotosByCityName(cityName: string): void {
@@ -130,6 +176,18 @@ export class MainScreenComponent implements OnInit {
         const shuffledPhotos = shuffleArray(photos);
         this.photos$$.next(shuffledPhotos);
         this.activePhoto$ = of(this.photos$$.getValue()?.[0]!);
+        console.log(photos);
       });
   }
+
+  public onReset() {
+    this.detailedInfoError$ = of(null);
+    this.timeError$ = of(null);
+    this.searchForm.enable();
+    this.searchForm.controls.cityName.setValue('');
+  }
+
+  public isBtnDisabled = (): boolean => {
+    return this.searchForm.disabled;
+  };
 }
