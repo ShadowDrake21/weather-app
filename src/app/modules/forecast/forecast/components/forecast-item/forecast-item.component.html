@@ -22,14 +22,15 @@
       </span>
       {{ forecast.pop }}%
     </div>
-    <div *ngIf="forecast.weather[0] as weather" class="forecast-item__wrapper">
-      <div class="forecast-item__point">
-        <span class="forecast-item__point-span">Main:</span>{{ weather.main }}
-      </div>
-      <div class="forecast-item__point">
-        <span class="forecast-item__point-span">Description:</span
-        >{{ weather.description }}
-      </div>
+  </div>
+  <div *ngIf="forecast.weather[0] as weather" class="forecast-item__wrapper">
+    <h3 class="forecast-item__wrapper-title">Weather</h3>
+    <div class="forecast-item__point">
+      <span class="forecast-item__point-span">Main:</span>{{ weather.main }}
+    </div>
+    <div class="forecast-item__point">
+      <span class="forecast-item__point-span">Description:</span
+      >{{ weather.description }}
     </div>
   </div>
   <div *ngIf="forecast.main as main" class="forecast-item__wrapper">

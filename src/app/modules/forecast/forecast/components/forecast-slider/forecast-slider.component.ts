@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -19,6 +20,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
+import { IForecastPoint } from '../../../../../shared/models/forecast.model';
 
 @Component({
   selector: 'app-forecast-slider',
@@ -27,16 +29,17 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForecastSliderComponent implements OnInit, OnDestroy {
+  @Input({ required: true, alias: 'items' }) sliderItems: IForecastPoint[] = [];
   @ViewChild('items', { static: true, read: ElementRef })
   slider!: ElementRef<HTMLDivElement>;
-
   active$!: Observable<boolean>;
-
-  panels = [...Array(25).keys()].map((i) => (i < 9 ? `0${i + 1}` : `${i + 1}`));
-
   subscription = new Subscription();
 
   ngOnInit(): void {
+    this.sliderFunctionality();
+  }
+
+  public sliderFunctionality() {
     const sliderNative = this.slider.nativeElement;
     const mouseDown$ = fromEvent(sliderNative, 'mousedown');
     const mouseLeave$ = fromEvent(sliderNative, 'mouseleave');
