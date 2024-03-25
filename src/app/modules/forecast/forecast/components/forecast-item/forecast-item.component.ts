@@ -1,12 +1,7 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+
 import { IForecastPoint } from '../../../../../shared/models/forecast.model';
-import { from, Observable, of, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-forecast-item',

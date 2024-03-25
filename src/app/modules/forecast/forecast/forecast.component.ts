@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, Observable, of, switchMap } from 'rxjs';
+
 import { ForecastService } from '../../../core/services/forecast.service';
 import { WeatherService } from '../../../core/services/weather.service';
 import { GeocodingService } from '../../../core/services/geocoding.service';
 import {
   ICityCoords,
-  IGeocoding,
   ILocalNames,
 } from '../../../shared/models/geocoding.model';
 import { IForecast } from '../../../shared/models/forecast.model';
@@ -23,6 +23,10 @@ export class ForecastComponent implements OnInit {
     private forecastService: ForecastService,
     private geocodingService: GeocodingService
   ) {}
+
+  // city alternative names as a dropdown
+  // Forecast Air Pollution
+  // next page: all main world times
 
   queryCityName$ = new Observable<string | null>();
   queryBgPath$ = new Observable<string | null>();
@@ -81,9 +85,6 @@ export class ForecastComponent implements OnInit {
           coordinates.lat,
           coordinates.lon
         );
-    });
-    this.cityForecast$.subscribe((forecast) => {
-      console.log(forecast);
     });
   }
 }

@@ -1,17 +1,9 @@
-import {
-  BehaviorSubject,
-  catchError,
-  map,
-  Observable,
-  of,
-  Subject,
-  timer,
-} from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, timer } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { WeatherService } from '../../../core/services/weather.service';
 import { IWeatherByNow } from '../../../shared/models/weather.model';
-import { FormControl, FormGroup } from '@angular/forms';
 import { UnsplashService } from '../../../core/services/unsplash.service';
 import { IPhotoInfo } from '../../../shared/models/photo.model';
 import { shuffleArray } from '../../../shared/utils/arrrays.utils';
