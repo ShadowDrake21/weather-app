@@ -31,3 +31,22 @@
   align-items: center;
   justify-content: center;
 }
+
+.slider__arrow {
+  cursor: pointer;
+  padding: 5px;
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 99;
+  border-radius: 10px;
+}
+
+.slider__arrow-left {
+  left: 15px;
+}
+
+.slider__arrow-right {
+  right: 15px;
+}
