@@ -2,12 +2,10 @@
   class="section forecast"
   [ngStyle]="{ 'background-image': 'url(' + (queryBgPath$ | async) + ')' }"
 >
-  <h1>City: {{ queryCityName$ | async }}</h1>
-  <div *ngIf="cityForecast$ | async as forecasts" class="forecast-list">
-    <app-forecast-item [item]="forecasts.list[0]"></app-forecast-item>
-    <app-forecast-item [item]="forecasts.list[1]"></app-forecast-item>
-    <app-forecast-item [item]="forecasts.list[2]"></app-forecast-item>
-    <app-forecast-item [item]="forecasts.list[3]"></app-forecast-item>
-  </div>
-  <app-forecast-slider></app-forecast-slider>
+  <h1 class="forecast__title">City: {{ queryCityName$ | async }}</h1>
+  <h2 class="forecast__subtitle">5 day / 3 hour weather forecast</h2>
+  <app-forecast-slider
+    *ngIf="cityForecast$ | async as forecasts"
+    [items]="forecasts.list"
+  ></app-forecast-slider>
 </section>

@@ -5,3 +5,21 @@
   flex-wrap: wrap;
   gap: 20px;
 }
+
+.forecast__title {
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 42px;
+  line-height: 48px;
+  color: white;
+  background-color: #000;
+}
+
+.forecast__subtitle {
+  text-align: center;
+  padding: 20px 0 10px;
+  font-size: 26px;
+  line-height: 32px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+}
