@@ -15,3 +15,9 @@ export function calculateUpdatedDate(
   );
   return currentUTCDate;
 }
+
+export function convertUnixTimestampToUTC(timestamp: number) {
+  const utcDate = new Date(timestamp * 1000);
+
+  return utcDate.toUTCString();
+}

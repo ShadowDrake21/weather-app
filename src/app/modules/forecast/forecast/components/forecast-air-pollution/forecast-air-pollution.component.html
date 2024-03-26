@@ -1,1 +1,103 @@
-<p>forecast-air-pollution works!</p>
+<div class="forecast__air-pollution__wrapper">
+  <div class="container">
+    <div
+      *ngIf="airPollutionForecast$$ | async as airPollution"
+      class="forecast__air-pollution"
+    >
+      <div
+        *ngFor="let pollutionItem of airPollution"
+        class="forecast__air-pollution__info"
+      >
+        <h2>
+          {{ convertUnixTimestampToUTC(pollutionItem.dt) | date : "short" }}
+        </h2>
+        <h4
+          *ngIf="pollutionItem.main.aqi as aqi"
+          [ngClass]="{
+            good: aqi === 1,
+            fair: aqi === 2,
+            moderate: aqi === 3,
+            poor: aqi === 4,
+            'very-poor': aqi === 5,
+            unknown: aqi === 6
+          }"
+          class="air-pollution__info-title"
+        >
+          <span class="forecast__air-pollution__info-title__span"
+            >Air Quality:
+          </span>
+          {{ getAirQualityText(aqi) }}
+        </h4>
+        <ul
+          *ngIf="pollutionItem.components as components"
+          class="forecast__air-pollution__info-list"
+        >
+          <li class="forecast__air-pollution__info-list__item">
+            <span class="forecast__air-pollution__info-list__item-span"
+              >CO:</span
+            >
+            <p class="forecast__air-pollution__info-list__item-value">
+              {{ components.co }} μg/m <sup>3</sup>
+            </p>
+          </li>
+          <li class="forecast__air-pollution__info-list__item">
+            <span class="forecast__air-pollution__info-list__item-span"
+              >NO:</span
+            >
+            <p class="forecast__air-pollution__info-list__item-value">
+              {{ components.no }} μg/m <sup>3</sup>
+            </p>
+          </li>
+          <li class="forecast__air-pollution__info-list__item">
+            <span class="forecast__air-pollution__info-list__item-span"
+              >NO<sub>2</sub>:</span
+            >
+            <p class="forecast__air-pollution__info-list__item-value">
+              {{ components.no2 }} μg/m <sup>3</sup>
+            </p>
+          </li>
+          <li class="forecast__air-pollution__info-list__item">
+            <span class="forecast__air-pollution__info-list__item-span"
+              >O<sub>3</sub>:</span
+            >
+            <p class="forecast__air-pollution__info-list__item-value">
+              {{ components.o3 }} μg/m <sup>3</sup>
+            </p>
+          </li>
+          <li class="forecast__air-pollution__info-list__item">
+            <span class="forecast__air-pollution__info-list__item-span"
+              >SO<sub>2</sub>:</span
+            >
+            <p class="forecast__air-pollution__info-list__item-value">
+              {{ components.so2 }} μg/m <sup>3</sup>
+            </p>
+          </li>
+          <li class="forecast__air-pollution__info-list__item">
+            <span class="forecast__air-pollution__info-list__item-span"
+              >PM<sub>2.5</sub>:</span
+            >
+            <p class="forecast__air-pollution__info-list__item-value">
+              {{ components.pm2_5 }} μg/m <sup>3</sup>
+            </p>
+          </li>
+          <li class="forecast__air-pollution__info-list__item">
+            <span class="forecast__air-pollution__info-list__item-span"
+              >PM<sub>10</sub>:</span
+            >
+            <p class="forecast__air-pollution__info-list__item-value">
+              {{ components.pm10 }} μg/m <sup>3</sup>
+            </p>
+          </li>
+          <li class="forecast__air-pollution__info-list__item">
+            <span class="forecast__air-pollution__info-list__item-span"
+              >NH<sub>3</sub>:</span
+            >
+            <p class="forecast__air-pollution__info-list__item-value">
+              {{ components.nh3 }} μg/m <sup>3</sup>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

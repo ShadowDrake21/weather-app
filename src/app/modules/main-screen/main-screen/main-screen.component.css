@@ -104,7 +104,7 @@
 }
 
 .main-screen__info {
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
   width: 100%;
   min-height: 400px;
