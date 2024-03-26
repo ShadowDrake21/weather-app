@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { filter, map, Observable, of, switchMap } from 'rxjs';
 
 import { ForecastService } from '../../../core/services/forecast.service';
 import { WeatherService } from '../../../core/services/weather.service';
@@ -19,7 +25,6 @@ import { IForecast } from '../../../shared/models/forecast.model';
 export class ForecastComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
-    private weatherService: WeatherService,
     private forecastService: ForecastService,
     private geocodingService: GeocodingService
   ) {}
@@ -30,9 +35,15 @@ export class ForecastComponent implements OnInit {
 
   queryCityName$ = new Observable<string | null>();
   queryBgPath$ = new Observable<string | null>();
+
+  activeCityName$ = new Observable<string | null>();
+
   cityCoords$ = new Observable<ICityCoords>();
-  cityAlternativeNames$ = new Observable<ILocalNames | undefined>();
+  private _alternativeNames$ = new Observable<[string, string][]>();
+  cityAlternativeNames$ = new Observable<[string, string][]>();
   cityForecast$ = new Observable<IForecast>();
+
+  @ViewChild('changer') titleChanger!: ElementRef<HTMLDivElement>;
 
   ngOnInit(): void {
     this.queryCityName$ = this.activatedRoute.queryParamMap.pipe(
@@ -44,6 +55,8 @@ export class ForecastComponent implements OnInit {
         this.getCityForecast();
       }
     });
+
+    this.activeCityName$ = this.queryCityName$;
 
     this.queryBgPath$ = this.activatedRoute.queryParamMap.pipe(
       map((params: ParamMap) => params.get('bg'))
@@ -63,7 +76,7 @@ export class ForecastComponent implements OnInit {
         switchMap((data) => {
           const cords: ICityCoords = { lat: data.lat, lon: data.lon };
           console.log(data);
-          this.cityAlternativeNames$ = of(data.local_names);
+          this.setAlternativeNames(data.local_names);
           return of(cords);
         })
       )
@@ -86,5 +99,71 @@ export class ForecastComponent implements OnInit {
           coordinates.lon
         );
     });
+  }
+
+  private setAlternativeNames(localNames: ILocalNames | undefined) {
+    let tmpCityAlternativeNames$: Observable<ILocalNames | undefined> =
+      of(localNames);
+    this.cityAlternativeNames$ = this.formatAltNamesObservable(
+      tmpCityAlternativeNames$
+    );
+    this._alternativeNames$ = this.cityAlternativeNames$;
+  }
+
+  public formatAltNamesObservable(
+    stream: Observable<ILocalNames | undefined>
+  ): Observable<[string, string][]> {
+    let alternativeNamesMap$ = new Observable<[string, string][]>();
+    alternativeNamesMap$ = stream.pipe(
+      switchMap((names) => {
+        if (!names) {
+          return of([]);
+        }
+        return of(Object.entries(names) as [string, string][]);
+      })
+    );
+
+    return alternativeNamesMap$;
+  }
+
+  public toggleTitleChangeDropdown(event: Event) {
+    const arrowEl = event.target as HTMLElement;
+    const wrapperEl = arrowEl.closest('.forecast__title-changer__img-wrapper');
+    let dropdownEl = wrapperEl?.nextElementSibling;
+
+    arrowEl.style.transform = dropdownEl?.classList.contains('active')
+      ? ''
+      : 'rotate(180deg)';
+
+    if (dropdownEl) {
+      dropdownEl?.classList.toggle('unactive');
+      dropdownEl?.classList.toggle('active');
+    }
+  }
+
+  public onTitleChange(value: [string, string]) {
+    this.activeCityName$ = of(`${value[0].toUpperCase()} - ${value[1]}`);
+    this.cityAlternativeNames$ = this._alternativeNames$.pipe(
+      map((names) =>
+        names.filter((name: [string, string]) => name[0] !== value[0])
+      )
+    );
+    this.closeDropdown();
+  }
+
+  private closeDropdown() {
+    const dropdownEl = this.titleChanger.nativeElement.children[1];
+
+    if (dropdownEl?.classList.contains('active')) {
+      dropdownEl.classList.remove('active');
+      dropdownEl.classList.add('unactive');
+
+      const arrowEl = this.titleChanger.nativeElement.querySelector(
+        '.forecast__title-changer__img'
+      ) as HTMLElement;
+      arrowEl.style.transform = '';
+    } else {
+      return;
+    }
   }
 }
