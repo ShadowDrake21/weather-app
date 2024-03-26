@@ -6,9 +6,10 @@ import { ForecastComponent } from './forecast/forecast.component';
 import { ForecastItemComponent } from './forecast/components/forecast-item/forecast-item.component';
 import { ChangeUnitsMeasurePipe } from '../../shared/pipes/change-units-measure.pipe';
 import { ForecastSliderComponent } from './forecast/components/forecast-slider/forecast-slider.component';
+import { ForecastAirPollutionComponent } from './forecast/components/forecast-air-pollution/forecast-air-pollution.component';
 
 @NgModule({
-  declarations: [ForecastComponent, ForecastItemComponent, ForecastSliderComponent],
+  declarations: [ForecastComponent, ForecastItemComponent, ForecastSliderComponent, ForecastAirPollutionComponent],
   imports: [CommonModule, ForecastRoutingModule, ChangeUnitsMeasurePipe],
 })
 export class ForecastModule {}

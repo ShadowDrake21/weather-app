@@ -35,4 +35,9 @@
     *ngIf="cityForecast$ | async as forecasts"
     [items]="forecasts.list"
   ></app-forecast-slider>
+  <div>
+    <app-forecast-air-pollution
+      [coords]="cityCoords$"
+    ></app-forecast-air-pollution>
+  </div>
 </section>

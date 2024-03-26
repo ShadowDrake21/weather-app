@@ -29,7 +29,6 @@ export class ForecastComponent implements OnInit {
     private geocodingService: GeocodingService
   ) {}
 
-  // city alternative names as a dropdown
   // Forecast Air Pollution
   // next page: all main world times
 

@@ -15,6 +15,5 @@ export class ForecastItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.forecastPoint$ = of(this.forecastPoint);
-    this.forecastPoint$.subscribe(console.log);
   }
 }
