@@ -2,7 +2,34 @@
   class="section forecast"
   [ngStyle]="{ 'background-image': 'url(' + (queryBgPath$ | async) + ')' }"
 >
-  <h1 class="forecast__title">City: {{ queryCityName$ | async }}</h1>
+  <div class="forecast__title-wrapper">
+    <h1 class="forecast__title">City: {{ activeCityName$ | async }}</h1>
+    <div class="forecast__title-changer" #changer>
+      <div
+        class="forecast__title-changer__img-wrapper"
+        (click)="toggleTitleChangeDropdown($event)"
+        #changer
+      >
+        <img
+          class="forecast__title-changer__img"
+          src="/assets/icons/arrows/arrow-down.svg"
+          alt="arrow-down"
+        />
+      </div>
+      <div
+        *ngIf="cityAlternativeNames$ | async as alternativeNames"
+        class="forecast__title-changer__dropdown unactive"
+      >
+        <div
+          *ngFor="let altName of alternativeNames"
+          class="forecast__title-changer__dropdown-item"
+          (click)="onTitleChange(altName)"
+        >
+          {{ altName[0] | uppercase }}{{ ": " }}{{ altName[1] }}
+        </div>
+      </div>
+    </div>
+  </div>
   <h2 class="forecast__subtitle">5 day / 3 hour weather forecast</h2>
   <app-forecast-slider
     *ngIf="cityForecast$ | async as forecasts"
