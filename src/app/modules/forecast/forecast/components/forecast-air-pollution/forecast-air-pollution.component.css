@@ -1,0 +1,38 @@
+.forecast__air-pollution__wrapper {
+  padding-top: 20px;
+}
+
+.forecast__air-pollution {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.forecast__air-pollution__info {
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  padding: 20px 25px;
+  width: 200px;
+}
+
+.air-pollution__info-title {
+  font-size: 20px;
+  line-height: 24px;
+  margin: 5px 0;
+}
+
+.forecast__air-pollution__info-list__item {
+  text-align: center;
+  padding: 10px 0;
+  font-size: 18px;
+  line-height: 24px;
+  border-bottom: 1px solid #fff;
+}
+
+.forecast__air-pollution__info-list__item:last-child {
+  border-bottom: none;
+}
+
+.forecast__air-pollution__info-list__item-span {
+  font-weight: 700;
+}

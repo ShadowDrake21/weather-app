@@ -10,6 +10,8 @@ import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { ICityCoords } from '../../../../../shared/models/geocoding.model';
 import { AirPollutionService } from '../../../../../core/services/air-pollution.service';
 import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
+import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
+import { convertUnixTimestampToUTC } from '../../../../../shared/utils/dateAndTime.utils';
 
 @Component({
   selector: 'app-forecast-air-pollution',
@@ -55,6 +57,9 @@ export class ForecastAirPollutionComponent
         });
     }
   }
+
+  public getAirQualityText = getAirQualityText;
+  public convertUnixTimestampToUTC = convertUnixTimestampToUTC;
 
   ngOnDestroy(): void {
     this.unsubscribe$$.next();
