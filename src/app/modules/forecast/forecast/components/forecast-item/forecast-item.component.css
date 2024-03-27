@@ -1,0 +1,40 @@
+.forecast-item {
+  max-width: 440px;
+  width: 100%;
+  padding: 20px 25px;
+  margin: 0 15px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.forecast-item__time {
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 4px solid #fff;
+  margin: 0 -25px 10px;
+}
+
+.forecast-item__wrapper {
+  border-bottom: 1px solid #fff;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.forecast-item__wrapper-title {
+  text-align: center;
+  font-size: 22px;
+  line-height: 28px;
+  padding-bottom: 10px;
+}
+
+.forecast-item__point {
+  text-align: center;
+}
+
+.forecast-item__point-span {
+  font-weight: 700;
+  padding-right: 5px;
+}

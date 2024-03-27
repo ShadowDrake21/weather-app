@@ -8,6 +8,7 @@ import {
   IGeocoding,
   IGeocodingByZipPost,
 } from '../../shared/models/geocoding.model';
+import { MAIN_CORS_ENDPOINT } from '../constants/cors.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +21,9 @@ export class GeocodingService {
     stateCode?: string,
     countryCode?: string,
     limit?: number
-  ): Observable<IGeocoding> {
-    return this.http.get<IGeocoding>(
-      `${MAIN_WEATHER_ENDPOINT}geo/1.0/direct?q=${cityName}` +
+  ): Observable<IGeocoding[]> {
+    return this.http.get<IGeocoding[]>(
+      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}geo/1.0/direct?q=${cityName}` +
         (stateCode ? `,${stateCode}` : '') +
         (countryCode ? `,${countryCode}` : '') +
         `&limit=${limit}&appid=${environment.weatherApiKey}`
@@ -34,7 +35,7 @@ export class GeocodingService {
     countryCode: string
   ): Observable<IGeocodingByZipPost> {
     return this.http.get<IGeocodingByZipPost>(
-      `${MAIN_WEATHER_ENDPOINT}geo/1.0/zip?zip=${zipcode},${countryCode}&appid=${environment.weatherApiKey}`
+      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}geo/1.0/zip?zip=${zipcode},${countryCode}&appid=${environment.weatherApiKey}`
     );
   }
 
@@ -44,7 +45,7 @@ export class GeocodingService {
     limit?: number
   ): Observable<IGeocoding> {
     return this.http.get<IGeocoding>(
-      `${MAIN_WEATHER_ENDPOINT}geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${environment.weatherApiKey}`
+      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${environment.weatherApiKey}`
     );
   }
 }

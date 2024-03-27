@@ -8,6 +8,7 @@ import {
 } from '../constants/weather.constans';
 import { environment } from '../../../environments/environment.development';
 import { IAirPollution } from '../../shared/models/airpollution.model';
+import { MAIN_CORS_ENDPOINT } from '../constants/cors.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class AirPollutionService {
     lon: number
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
-      `https://corsproxy.io/?${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
+      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
     );
   }
 
@@ -29,7 +30,7 @@ export class AirPollutionService {
     lon: number
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
-      `${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/forecast?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
+      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/forecast?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
     );
   }
 
@@ -40,7 +41,7 @@ export class AirPollutionService {
     end: string
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
-      `${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${environment.weatherApiKey}`
+      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${environment.weatherApiKey}`
     );
   }
 }

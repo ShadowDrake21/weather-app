@@ -1,0 +1,21 @@
+<div
+  *ngIf="(arrows$$ | async)?.leftArrow"
+  class="slider__arrow slider__arrow-left"
+  (click)="moveSlider('left')"
+>
+  <img src="/assets/icons/arrows/arrow-left.svg" alt="" style="width: 40px" />
+</div>
+<div class="items" [ngClass]="{ active: active$ | async }" #items>
+  <app-forecast-item
+    *ngFor="let item of sliderItems"
+    [item]="item"
+    class="item"
+  ></app-forecast-item>
+</div>
+<div
+  *ngIf="(arrows$$ | async)?.rightArrow"
+  class="slider__arrow slider__arrow-right"
+  (click)="moveSlider('right')"
+>
+  <img src="/assets/icons/arrows/arrow-right.svg" alt="" style="width: 40px" />
+</div>

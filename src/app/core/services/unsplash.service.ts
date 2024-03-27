@@ -28,7 +28,6 @@ export class UnsplashService {
   }
 
   private extractPhotoInfo(results: any[]): IPhotoInfo[] {
-    console.log('extract', results);
     return results.map((result) => ({
       url: result.urls.regular,
       orientation: 'landscape',
