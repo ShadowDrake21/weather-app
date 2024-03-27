@@ -16,4 +16,9 @@ export const routes: Routes = [
         (m) => m.ForecastModule
       ),
   },
+  {
+    path: 'clocks',
+    loadChildren: () =>
+      import('./modules/clocks/clocks.module').then((m) => m.ClocksModule),
+  },
 ];
