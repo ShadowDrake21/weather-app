@@ -3,27 +3,30 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class PaginationService {
-  items$$ = new BehaviorSubject<any[]>([]);
-  visibleItems$$ = new BehaviorSubject<any[]>([]);
-  currentPage$$ = new BehaviorSubject<number>(1);
-  itemsPerPage = 5;
+  private items$$ = new BehaviorSubject<any[]>([]);
+  public visibleItems$$ = new BehaviorSubject<any[]>([]);
+  public currentPage$$ = new BehaviorSubject<number>(1);
+  private itemsPerPage$$ = new BehaviorSubject<number>(5);
 
-  public setItem(items: any[]): void {
-    this.items$$.next(items);
+  public setItems(itemsIn$$: Subject<any>): void {
+    itemsIn$$.subscribe((value: any) => {
+      this.items$$.next(value);
+    });
     this.updateVisibleItems();
   }
 
-  public updateVisibleItems() {
-    const startIndex = (this.currentPage$$.value - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+  public setItemsPerPage(value: number) {
+    this.itemsPerPage$$.next(value);
+  }
+
+  private updateVisibleItems() {
+    const startIndex =
+      (this.currentPage$$.value - 1) * this.itemsPerPage$$.value;
+    const endIndex = startIndex + this.itemsPerPage$$.value;
     this.visibleItems$$.next(this.items$$.value.slice(startIndex, endIndex));
   }
 
-  public calcNumPages(): number {
-    return Math.ceil(this.items$$.value.length / this.itemsPerPage);
-  }
-
-  public setCurrentPage(page: number): void {
+  private setCurrentPage(page: number): void {
     this.currentPage$$.next(page);
     this.updateVisibleItems();
   }
@@ -40,5 +43,9 @@ export class PaginationService {
     if (prevPage >= 1) {
       this.setCurrentPage(prevPage);
     }
+  }
+
+  public calcNumPages(): number {
+    return Math.ceil(this.items$$.value.length / this.itemsPerPage$$.value);
   }
 }

@@ -6,12 +6,26 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { ICityCoords } from '../../../../../shared/models/geocoding.model';
 import { AirPollutionService } from '../../../../../core/services/air-pollution.service';
 import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
 import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
 import { convertUnixTimestampToUTC } from '../../../../../shared/utils/dateAndTime.utils';
+import { PaginationService } from '../../../../../core/services/pagination.service';
+
+type PagesProportions = {
+  currentPage: number;
+  allPages: number;
+};
 
 @Component({
   selector: 'app-forecast-air-pollution',
@@ -24,9 +38,15 @@ export class ForecastAirPollutionComponent
   @Input({ required: true, alias: 'coords' }) coords$ =
     new Observable<ICityCoords>();
 
-  constructor(private airPollutionService: AirPollutionService) {}
+  constructor(
+    private airPollutionService: AirPollutionService,
+    private paginationService: PaginationService
+  ) {}
 
-  airPollutionForecast$$ = new Subject<IAirPollutionList[]>();
+  airPollutionForecast$$ = new BehaviorSubject<IAirPollutionList[]>([]);
+  visibleAirPollutionForecast$$ = new Subject<IAirPollutionList[]>();
+  pages$ = new Observable<PagesProportions>();
+
   private unsubscribe$$ = new Subject<void>();
 
   ngOnInit(): void {
@@ -53,10 +73,44 @@ export class ForecastAirPollutionComponent
         )
         .subscribe((pollutionData) => {
           this.airPollutionForecast$$.next(pollutionData.list);
-          console.log(pollutionData.list);
+          this.paginationService.setItemsPerPage(6);
+          this.paginationService.setItems(this.airPollutionForecast$$);
+          this.formPagesObservable();
         });
+
+      this.paginationService.visibleItems$$.subscribe((visibleItems) => {
+        this.visibleAirPollutionForecast$$.next(visibleItems);
+      });
     }
   }
+
+  private formPagesObservable() {
+    this.pages$ = of({
+      currentPage: this.paginationService.currentPage$$.value,
+      allPages: this.paginationService.calcNumPages(),
+    } as PagesProportions);
+  }
+
+  public onNextPage = (): void => {
+    this.paginationService.nextPage();
+    this.formPagesObservable();
+  };
+
+  public onPreviousPage = (): void => {
+    this.paginationService.previousPage();
+    this.formPagesObservable();
+  };
+
+  public isFirstOrLastPage = (type: 'prev' | 'next'): boolean => {
+    if (type === 'prev') {
+      return this.paginationService.currentPage$$.value === 1;
+    } else {
+      return (
+        this.paginationService.currentPage$$.value ===
+        this.paginationService.calcNumPages()
+      );
+    }
+  };
 
   public getAirQualityText = getAirQualityText;
   public convertUnixTimestampToUTC = convertUnixTimestampToUTC;

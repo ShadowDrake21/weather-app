@@ -45,7 +45,6 @@ export class ForecastSliderComponent implements OnInit, OnDestroy {
   }
 
   public sliderFunctionality() {
-    console.log('slider', this.slider);
     const sliderNative = this.slider.nativeElement;
     const mouseDown$ = fromEvent(sliderNative, 'mousedown');
     const mouseLeave$ = fromEvent(sliderNative, 'mouseleave');
