@@ -1,15 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { filter, map, Observable, of, switchMap } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 
 import { ForecastService } from '../../../core/services/forecast.service';
-import { WeatherService } from '../../../core/services/weather.service';
 import { GeocodingService } from '../../../core/services/geocoding.service';
 import {
   ICityCoords,
