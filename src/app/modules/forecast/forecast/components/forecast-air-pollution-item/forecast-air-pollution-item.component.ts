@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
 import { Observable, of } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
 import { convertUnixTimestampToUTC } from '../../../../../shared/utils/dateAndTime.utils';
 import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
 
