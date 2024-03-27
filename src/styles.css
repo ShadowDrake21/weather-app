@@ -2,6 +2,8 @@ html,
 *::after,
 *::before {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 h1,
@@ -38,6 +40,16 @@ body {
   max-width: 1670px;
   padding: 0 15px;
   margin: auto;
+}
+
+.section {
+  min-height: 100vh;
+  height: 100%;
+  background-image: url("/assets/background-img.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
 }
 
 .error {
@@ -79,4 +91,23 @@ body {
 
 .error-reset__btn:hover {
   background-color: rgb(71, 82, 196);
+}
+
+.air-pollution__info-title.good {
+  color: rgb(30, 255, 0);
+}
+.air-pollution__info-title.fair {
+  color: rgb(193, 255, 143);
+}
+.air-pollution__info-title.moderate {
+  color: rgb(255, 251, 0);
+}
+.air-pollution__info-title.poor {
+  color: rgb(255, 0, 0);
+}
+.air-pollution__info-title.very-poor {
+  color: rgb(97, 0, 0);
+}
+.air-pollution__info-title.unknown {
+  color: white;
 }

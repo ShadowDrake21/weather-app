@@ -1,17 +1,9 @@
-import {
-  BehaviorSubject,
-  catchError,
-  map,
-  Observable,
-  of,
-  Subject,
-  timer,
-} from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, timer } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { WeatherService } from '../../../core/services/weather.service';
 import { IWeatherByNow } from '../../../shared/models/weather.model';
-import { FormControl, FormGroup } from '@angular/forms';
 import { UnsplashService } from '../../../core/services/unsplash.service';
 import { IPhotoInfo } from '../../../shared/models/photo.model';
 import { shuffleArray } from '../../../shared/utils/arrrays.utils';
@@ -176,7 +168,6 @@ export class MainScreenComponent implements OnInit {
         const shuffledPhotos = shuffleArray(photos);
         this.photos$$.next(shuffledPhotos);
         this.activePhoto$ = of(this.photos$$.getValue()?.[0]!);
-        console.log(photos);
       });
   }
 

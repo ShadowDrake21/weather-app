@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { MainScreenModule } from './modules/main-screen/main-screen.module';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full' },
@@ -8,6 +7,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./modules/main-screen/main-screen.module').then(
         (m) => m.MainScreenModule
+      ),
+  },
+  {
+    path: 'forecast',
+    loadChildren: () =>
+      import('./modules/forecast/forecast.module').then(
+        (m) => m.ForecastModule
       ),
   },
 ];
