@@ -60,9 +60,6 @@ export class ForecastComponent implements OnInit {
     this.queryBgPath$ = this.activatedRoute.queryParamMap.pipe(
       map((params: ParamMap) => params.get('bg'))
     );
-    this.queryBgPath$.subscribe((path) => {
-      console.log('path', path);
-    });
   }
 
   public getCityCoords(cityName: string) {
@@ -74,7 +71,6 @@ export class ForecastComponent implements OnInit {
         }),
         switchMap((data) => {
           const cords: ICityCoords = { lat: data.lat, lon: data.lon };
-          console.log(data);
           this.setAlternativeNames(data.local_names);
           return of(cords);
         })

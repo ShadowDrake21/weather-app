@@ -7,9 +7,18 @@ import { ForecastItemComponent } from './forecast/components/forecast-item/forec
 import { ChangeUnitsMeasurePipe } from '../../shared/pipes/change-units-measure.pipe';
 import { ForecastSliderComponent } from './forecast/components/forecast-slider/forecast-slider.component';
 import { ForecastAirPollutionComponent } from './forecast/components/forecast-air-pollution/forecast-air-pollution.component';
+import { PaginationService } from '../../core/services/pagination.service';
+import { ForecastAirPollutionItemComponent } from './forecast/components/forecast-air-pollution-item/forecast-air-pollution-item.component';
 
 @NgModule({
-  declarations: [ForecastComponent, ForecastItemComponent, ForecastSliderComponent, ForecastAirPollutionComponent],
+  declarations: [
+    ForecastComponent,
+    ForecastItemComponent,
+    ForecastSliderComponent,
+    ForecastAirPollutionComponent,
+    ForecastAirPollutionItemComponent,
+  ],
   imports: [CommonModule, ForecastRoutingModule, ChangeUnitsMeasurePipe],
+  providers: [PaginationService],
 })
 export class ForecastModule {}

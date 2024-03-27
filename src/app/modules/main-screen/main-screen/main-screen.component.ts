@@ -168,7 +168,6 @@ export class MainScreenComponent implements OnInit {
         const shuffledPhotos = shuffleArray(photos);
         this.photos$$.next(shuffledPhotos);
         this.activePhoto$ = of(this.photos$$.getValue()?.[0]!);
-        console.log(photos);
       });
   }
 
