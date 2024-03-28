@@ -16,6 +16,22 @@
   width: 100%;
 }
 
+.main-screen__top-inner {
+  display: flex;
+  gap: 50px;
+}
+
+.main-screen__top-info__link {
+  text-decoration: underline;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.main-screen__top-info__link-icon {
+  width: 30px;
+}
+
 .main-screen__top-info {
   margin-left: 40px;
   padding: 20px 30px;

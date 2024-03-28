@@ -1,0 +1,59 @@
+.clocks__title-wrapper {
+  background-color: #000;
+}
+
+.clocks__title {
+  padding: 10px 20px;
+  font-size: 42px;
+  line-height: 48px;
+  text-align: center;
+  color: #fff;
+}
+
+.clocks__link-wrapper {
+  width: 300px;
+  margin-top: 30px;
+}
+
+.clocks__list {
+  padding: 30px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: space-between;
+}
+
+.clocks__list-item {
+  width: 260px;
+  height: 350px;
+  background-image: url("/assets/alarm-clock.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.clock__list-item__info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+}
+
+.clock__list-item__info-time {
+  font-size: 34px;
+  line-height: 40px;
+  padding-bottom: 5px;
+}
+
+.clock__list-item__info-date {
+  font-size: 20px;
+  line-height: 26px;
+  padding-bottom: 5px;
+}
+
+.clock__list-item__info-timezone {
+  font-size: 18px;
+  line-height: 24px;
+}
