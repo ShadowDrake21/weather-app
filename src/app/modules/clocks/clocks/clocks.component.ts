@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
+  catchError,
   map,
   Observable,
   of,
@@ -19,7 +20,6 @@ import {
 import { IWorldAreas } from '../../../shared/models/world-areas.model';
 import { UnsplashService } from '../../../core/services/unsplash.service';
 import { IPhotoInfo } from '../../../shared/models/photo.model';
-import { shuffleArray } from '../../../shared/utils/arrrays.utils';
 
 @Component({
   selector: 'app-clocks',
@@ -32,7 +32,7 @@ export class ClocksComponent implements OnInit, OnDestroy {
     private unsplashService: UnsplashService
   ) {}
 
-  allEuropeTimes: Observable<IClockTime>[] = [];
+  allEuropeTimes: Observable<IClockTime | null>[] = [];
   photo$ = new Observable<IPhotoInfo | null>();
 
   private destroy$$: Subject<void> = new Subject<void>();
@@ -40,10 +40,13 @@ export class ClocksComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.allEuropeTimes = this.getAllCitiesCurrentTime(europeAreas);
     this.getPhotosByCityName();
-    console.log('allEuropeTimes', this.allEuropeTimes);
   }
 
-  public getAllCitiesCurrentTime(areas: IWorldAreas): Observable<IClockTime>[] {
+  // error handling allEuropeTimes + adaptive
+
+  public getAllCitiesCurrentTime(
+    areas: IWorldAreas
+  ): Observable<IClockTime | null>[] {
     return areas.countriesCapitals.map((city) =>
       this.timeService
         .getTimezoneByZoneName(`${europeAreas.areaName}/${city}`)
@@ -62,7 +65,11 @@ export class ClocksComponent implements OnInit, OnDestroy {
                   } as IClockTime)
               )
             )
-          )
+          ),
+          catchError((error: any) => {
+            console.error('Error fetching timezone: ', error);
+            return of(null);
+          })
         )
     );
   }

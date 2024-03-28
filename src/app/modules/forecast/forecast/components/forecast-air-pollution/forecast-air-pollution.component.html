@@ -1,4 +1,7 @@
-<div class="forecast__air-pollution__wrapper">
+<div
+  class="forecast__air-pollution__wrapper"
+  *ngIf="!(airPollutionForecastError$ | async); else fetchingError"
+>
   <div class="container">
     <div class="forecast__air-pollution">
       <div
@@ -54,3 +57,11 @@
     </div>
   </div>
 </div>
+<ng-template #fetchingError>
+  <div *ngIf="airPollutionForecastError$ | async as error" class="error">
+    <p class="error__message">
+      <span class="error__name">{{ error.name | truncateText : 50 }}:</span
+      >{{ error.message | truncateText : 35 }}
+    </p>
+  </div>
+</ng-template>

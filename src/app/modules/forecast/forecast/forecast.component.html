@@ -30,17 +30,46 @@
       </div>
     </div>
   </div>
-  <div class="forecast__component">
-    <h2 class="forecast__subtitle">5 day / 3 hour weather forecast</h2>
-    <app-forecast-slider
-      *ngIf="cityForecast$ | async as forecasts"
-      [items]="forecasts.list"
-    ></app-forecast-slider>
+  <div *ngIf="!(cityCoordsError$ | async) as error; else fetchingError">
+    <div class="forecast__component">
+      <div class="forecast__subtitle-wrapper">
+        <a class="forecast__link" routerLink="/main"
+          ><img
+            class="forecast__link-icon"
+            src="/assets/icons/back.svg"
+            alt="back"
+          />Back to the main page</a
+        >
+        <h2 class="forecast__subtitle">5 day / 3 hour weather forecast</h2>
+      </div>
+      <app-forecast-slider
+        *ngIf="cityForecast$ | async as forecasts"
+        [items]="forecasts.list"
+      ></app-forecast-slider>
+    </div>
+    <div class="forecast__component">
+      <div class="forecast__subtitle-wrapper">
+        <h2 class="forecast__subtitle">
+          4 day / 1 hour air pollution forecast
+        </h2>
+      </div>
+      <app-forecast-air-pollution
+        [coords]="cityCoords$"
+      ></app-forecast-air-pollution>
+    </div>
   </div>
-  <div class="forecast__component">
-    <h2 class="forecast__subtitle">4 day / 1 hour air pollution forecast</h2>
-    <app-forecast-air-pollution
-      [coords]="cityCoords$"
-    ></app-forecast-air-pollution>
-  </div>
+  <ng-template #fetchingError>
+    <div
+      *ngIf="cityCoordsError$ | async as error"
+      class="error forecast__error"
+    >
+      <p class="error__message">
+        <span class="error__name">{{ error.name | truncateText : 50 }}:</span
+        >{{ error.message | truncateText : 35 }}
+      </p>
+      <button class="error-reset__btn" type="button" (click)="backToMain()">
+        Back to the main page
+      </button>
+    </div>
+  </ng-template>
 </section>
