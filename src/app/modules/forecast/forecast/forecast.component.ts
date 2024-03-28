@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { map, Observable, of, switchMap } from 'rxjs';
 
 import { ForecastService } from '../../../core/services/forecast.service';
@@ -9,6 +9,7 @@ import {
   ILocalNames,
 } from '../../../shared/models/geocoding.model';
 import { IForecast } from '../../../shared/models/forecast.model';
+import { IHttpError } from '../../../shared/models/error.model';
 
 @Component({
   selector: 'app-forecast',
@@ -19,17 +20,16 @@ export class ForecastComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private forecastService: ForecastService,
-    private geocodingService: GeocodingService
+    private geocodingService: GeocodingService,
+    private router: Router
   ) {}
-
-  // Forecast Air Pollution
-  // next page: all main world times
 
   queryCityName$ = new Observable<string | null>();
   queryBgPath$ = new Observable<string | null>();
 
   activeCityName$ = new Observable<string | null>();
 
+  cityCoordsError$ = new Observable<IHttpError | null>();
   cityCoords$ = new Observable<ICityCoords>();
   private _alternativeNames$ = new Observable<[string, string][]>();
   cityAlternativeNames$ = new Observable<[string, string][]>();
@@ -74,7 +74,10 @@ export class ForecastComponent implements OnInit {
           this.getCityForecast();
         },
         error: (error) => {
-          console.error('Error while getting city coordinates:', error);
+          this.cityCoordsError$ = of({
+            name: `Error while getting city coordinates (${error.name})`,
+            message: error.message,
+          } as IHttpError);
         },
       });
   }
@@ -153,5 +156,9 @@ export class ForecastComponent implements OnInit {
     } else {
       return;
     }
+  }
+
+  public backToMain() {
+    this.router.navigateByUrl('/main');
   }
 }
