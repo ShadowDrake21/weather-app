@@ -4,19 +4,32 @@
 >
   <div class="main-screen__wrapper">
     <div class="main-screen__top">
-      <div
-        *ngIf="activePhoto$ | async as activePhoto"
-        class="main-screen__top-info"
-      >
-        <h2 class="main-screen__top-info__title">
-          {{ (weather$$ | async)?.name ?? "Welcome!" | truncateText : 50 }}
-        </h2>
-        <a
-          *ngIf="weather$$ | async as weather"
-          [routerLink]="['/forecast']"
-          [queryParams]="{ city: weather?.name, bg: (photos$$ | async)?.[0]?.url}"
-          >Go to 5 days forecast</a
+      <div class="main-screen__top-inner">
+        <div
+          *ngIf="activePhoto$ | async as activePhoto"
+          class="main-screen__top-info"
         >
+          <h2 class="main-screen__top-info__title">
+            {{ (weather$$ | async)?.name ?? "Welcome!" | truncateText : 50 }}
+          </h2>
+          <a
+            class="main-screen__top-info__link"
+            *ngIf="weather$$ | async as weather"
+            [routerLink]="['/forecast']"
+            [queryParams]="{ city: weather?.name, bg: (photos$$ | async)?.[0]?.url}"
+            ><img
+              class="main-screen__top-info__link-icon"
+              src="/assets/icons/forecast.svg"
+              alt="forecast"
+            />Go to 5 days forecast</a
+          >
+        </div>
+        <div class="link__wrapper">
+          <a class="link" routerLink="/clocks"
+            ><img class="link-icon" src="/assets/icons/clock.svg" alt="clock" />
+            Go to the clocks page</a
+          >
+        </div>
       </div>
       <div class="main-screen__top-search">
         <form

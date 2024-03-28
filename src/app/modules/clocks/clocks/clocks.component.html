@@ -2,13 +2,31 @@
   class="section clocks__section"
   [ngStyle]="{ 'background-image': 'url(' + (photo$ | async)?.url + ')' }"
 >
-  <p>europe</p>
-  <div *ngFor="let cityTime$ of allEuropeTimes">
-    <ng-container *ngIf="cityTime$ | async as time">
-      <p>{{ time.time | date : "HH:mm:ss" }}</p>
-      <p>{{ time.time | date : "MMM d, yyyy, EEE" }}</p>
-      <p>{{ time.timezone }}</p>
-    </ng-container>
+  <div class="clocks__title-wrapper">
+    <h1 class="clocks__title">Time in Europe capitals</h1>
+  </div>
+  <div class="container">
+    <div class="clocks__link-wrapper link__wrapper">
+      <a class="clocks__link link" routerLink="/main"
+        ><img class="link-icon" src="/assets/icons/back.svg" alt="back" /> Go
+        back to the main page</a
+      >
+    </div>
+    <div class="clocks__list">
+      <div *ngFor="let cityTime$ of allEuropeTimes" class="clocks__list-item">
+        <ng-container *ngIf="cityTime$ | async as time">
+          <div class="clock__list-item__info">
+            <h2 class="clock__list-item__info-time">
+              {{ time.time | date : "HH:mm:ss" }}
+            </h2>
+            <h3 class="clock__list-item__info-date">
+              {{ time.time | date : "MMM d, yyyy, EEE" }}
+            </h3>
+            <h4 class="clock__list-item__info-timezone">{{ time.timezone }}</h4>
+          </div>
+        </ng-container>
+      </div>
+    </div>
   </div>
   <!-- europe -->
 </section>
