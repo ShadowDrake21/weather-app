@@ -31,3 +31,8 @@ export interface ITimezone {
   utc_offset: string;
   week_number: number;
 }
+
+export interface IClockTime {
+  time: Date;
+  timezone: string;
+}
