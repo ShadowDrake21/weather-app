@@ -1,35 +1,14 @@
-<!-- europe -->
-<p>europe</p>
-<div *ngFor="let cityTime$ of allEuropeTimes">
-  <ng-container *ngIf="cityTime$ | async as time">
-    <p>{{ time | date : "HH:mm:ss" }}</p></ng-container
-  >
-</div>
-<!-- europe -->
-
-<!-- americas -->
-<p>americas</p>
-<div *ngFor="let cityTime$ of allAmericasTimes">
-  <ng-container *ngIf="cityTime$ | async as time">
-    <p>{{ time | date : "HH:mm:ss" }}</p></ng-container
-  >
-</div>
-<!-- americas -->
-
-<!-- asian -->
-<p>asian</p>
-<div *ngFor="let cityTime$ of allAsianTimes">
-  <ng-container *ngIf="cityTime$ | async as time">
-    <p>{{ time | date : "HH:mm:ss" }}</p></ng-container
-  >
-</div>
-<!-- asian -->
-
-<!-- african -->
-<p>african</p>
-<div *ngFor="let cityTime$ of allAfricanTimes">
-  <ng-container *ngIf="cityTime$ | async as time">
-    <p>{{ time | date : "HH:mm:ss" }}</p></ng-container
-  >
-</div>
-<!-- african -->
+<section
+  class="section clocks__section"
+  [ngStyle]="{ 'background-image': 'url(' + (photo$ | async)?.url + ')' }"
+>
+  <p>europe</p>
+  <div *ngFor="let cityTime$ of allEuropeTimes">
+    <ng-container *ngIf="cityTime$ | async as time">
+      <p>{{ time.time | date : "HH:mm:ss" }}</p>
+      <p>{{ time.time | date : "MMM d, yyyy, EEE" }}</p>
+      <p>{{ time.timezone }}</p>
+    </ng-container>
+  </div>
+  <!-- europe -->
+</section>
