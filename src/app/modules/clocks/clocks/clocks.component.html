@@ -1,0 +1,55 @@
+<section
+  class="section clocks__section"
+  [ngStyle]="{ 'background-image': 'url(' + (photo$ | async)?.url + ')' }"
+>
+  <div class="clocks__title-wrapper">
+    <h1 class="clocks__title">Time in Europe capitals</h1>
+  </div>
+  <div class="container">
+    <div class="clocks__link-wrapper link__wrapper">
+      <a class="clocks__link link" routerLink="/main"
+        ><img class="link-icon" src="/assets/icons/back.svg" alt="back" /> Go
+        back to the main page</a
+      >
+    </div>
+    <div *ngIf="!(isLoading$ | async); else loading">
+      <div class="clocks__list">
+        <div
+          *ngFor="let cityTime$ of allEuropeTimes$"
+          class="clocks__list-item"
+        >
+          <ng-container *ngIf="cityTime$ | async as time; else timeError">
+            <div class="clock__list-item__info">
+              <h2 class="clock__list-item__info-time">
+                {{ time.time | date : "HH:mm:ss" }}
+              </h2>
+              <h3 class="clock__list-item__info-date">
+                {{ time.time | date : "MMM d, yyyy, EEE" }}
+              </h3>
+              <h4 class="clock__list-item__info-timezone">
+                {{ time.timezone }}
+              </h4>
+            </div>
+          </ng-container>
+        </div>
+        <ng-template #timeError>
+          <div
+            *ngIf="timesError$ | async as error"
+            class="clock__list-item__info time__error"
+          >
+            <h5 class="time__error-title">{{ error.name | truncateText }}</h5>
+            <p class="time__error-message">
+              {{ error.message | truncateText }}
+            </p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <ng-template #loading>
+      <div class="loading">
+        <div class="loader"></div>
+      </div>
+    </ng-template>
+  </div>
+  <!-- europe -->
+</section>

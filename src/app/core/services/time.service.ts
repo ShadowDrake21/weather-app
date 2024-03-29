@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -25,8 +25,8 @@ export class TimeService {
     return this.http.get<ITime>(url);
   }
 
-  public getTimezoneByZoneName(zoneName: string) {
+  public getTimezoneByZoneName(zoneName: string): Observable<ITime> {
     const url = `${MAIN_CORS_ENDPOINT}${MAIN_WORLDTIME_ENDPOINT}${zoneName}`;
-    return this.http.get(url);
+    return this.http.get<ITime>(url);
   }
 }

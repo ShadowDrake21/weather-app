@@ -13,14 +13,15 @@ import {
   Subject,
   switchMap,
   takeUntil,
-  tap,
 } from 'rxjs';
+
 import { ICityCoords } from '../../../../../shared/models/geocoding.model';
 import { AirPollutionService } from '../../../../../core/services/air-pollution.service';
 import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
 import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
 import { convertUnixTimestampToUTC } from '../../../../../shared/utils/dateAndTime.utils';
 import { PaginationService } from '../../../../../core/services/pagination.service';
+import { IHttpError } from '../../../../../shared/models/error.model';
 
 type PagesProportions = {
   currentPage: number;
@@ -43,6 +44,7 @@ export class ForecastAirPollutionComponent
     private paginationService: PaginationService
   ) {}
 
+  airPollutionForecastError$ = new Observable<IHttpError | null>();
   airPollutionForecast$$ = new BehaviorSubject<IAirPollutionList[]>([]);
   visibleAirPollutionForecast$$ = new Subject<IAirPollutionList[]>();
   pages$ = new Observable<PagesProportions>();
@@ -71,11 +73,18 @@ export class ForecastAirPollutionComponent
           ),
           takeUntil(this.unsubscribe$$)
         )
-        .subscribe((pollutionData) => {
-          this.airPollutionForecast$$.next(pollutionData.list);
-          this.paginationService.setItemsPerPage(6);
-          this.paginationService.setItems(this.airPollutionForecast$$);
-          this.formPagesObservable();
+        .subscribe({
+          next: (pollutionData) => {
+            this.airPollutionForecast$$.next(pollutionData.list);
+            this.paginationService.setItemsPerPage(6);
+            this.paginationService.setItems(this.airPollutionForecast$$);
+            this.formPagesObservable();
+          },
+          error: (error) =>
+            (this.airPollutionForecastError$ = of({
+              name: `Error while getting city air polluion (${error.name})`,
+              message: error.message,
+            } as IHttpError)),
         });
 
       this.paginationService.visibleItems$$.subscribe((visibleItems) => {
