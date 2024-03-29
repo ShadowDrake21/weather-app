@@ -24,7 +24,7 @@
             />Go to 5 days forecast</a
           >
         </div>
-        <div class="link__wrapper">
+        <div class="link__wrapper" *ngIf="!(blockElements$$ | async)">
           <a class="link" routerLink="/clocks"
             ><img class="link-icon" src="/assets/icons/clock.svg" alt="clock" />
             Go to the clocks page</a
@@ -81,7 +81,9 @@
             <p class="error__message">
               <span class="error__name"
                 >{{ error.name | truncateText : 20 }}:</span
-              >{{ error.message | truncateText : 35 }}
+              >{{
+                error.message || "Unknown error: try later" | truncateText : 35
+              }}
             </p>
           </div>
         </ng-template>
@@ -97,9 +99,15 @@
             <span class="error__name">{{ error.name }}:</span
             >{{ error.message }}
           </p>
-          <button class="error-reset__btn" type="button" (click)="onReset()">
+          <button
+            class="error-reset__btn"
+            type="button"
+            (click)="onReset()"
+            [disabled]="blockElements$$ | async"
+          >
             Reset
           </button>
+          <div *ngIf="blockElements$$ | async" class="loader"></div>
         </div>
         <div class="main-screen__info-inner">
           <div *ngIf="(weather$$ | async) !== null; else weatherError">
