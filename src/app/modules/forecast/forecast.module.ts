@@ -10,6 +10,11 @@ import { ForecastAirPollutionComponent } from './forecast/components/forecast-ai
 import { PaginationService } from '../../core/services/pagination.service';
 import { ForecastAirPollutionItemComponent } from './forecast/components/forecast-air-pollution-item/forecast-air-pollution-item.component';
 import { TruncateTextPipe } from '../../shared/pipes/truncate-text.pipe';
+import { HistoricalAirPollutionComponent } from './forecast/components/historical-ari-pollution/historical-air-pollution.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,13 +23,18 @@ import { TruncateTextPipe } from '../../shared/pipes/truncate-text.pipe';
     ForecastSliderComponent,
     ForecastAirPollutionComponent,
     ForecastAirPollutionItemComponent,
+    HistoricalAirPollutionComponent,
   ],
   imports: [
     CommonModule,
     ForecastRoutingModule,
     ChangeUnitsMeasurePipe,
     TruncateTextPipe,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
-  providers: [PaginationService],
+  providers: [PaginationService, provideNativeDateAdapter()],
 })
 export class ForecastModule {}

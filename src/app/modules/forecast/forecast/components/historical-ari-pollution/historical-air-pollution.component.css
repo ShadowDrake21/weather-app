@@ -1,0 +1,10 @@
+.historical-ari__pollution {
+  padding-top: 25px;
+}
+
+.historical-ari__pollution-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
