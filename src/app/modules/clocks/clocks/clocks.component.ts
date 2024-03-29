@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   catchError,
+  delay,
   map,
   Observable,
   of,
@@ -20,6 +21,7 @@ import {
 import { IWorldAreas } from '../../../shared/models/world-areas.model';
 import { UnsplashService } from '../../../core/services/unsplash.service';
 import { IPhotoInfo } from '../../../shared/models/photo.model';
+import { IHttpError } from '../../../shared/models/error.model';
 
 @Component({
   selector: 'app-clocks',
@@ -32,46 +34,68 @@ export class ClocksComponent implements OnInit, OnDestroy {
     private unsplashService: UnsplashService
   ) {}
 
-  allEuropeTimes: Observable<IClockTime | null>[] = [];
+  isLoading$ = new Observable<boolean>();
+
   photo$ = new Observable<IPhotoInfo | null>();
+  timesError$!: Observable<IHttpError>;
+  allEuropeTimes$: Observable<IClockTime | null>[] = [];
 
   private destroy$$: Subject<void> = new Subject<void>();
 
   ngOnInit(): void {
-    this.allEuropeTimes = this.getAllCitiesCurrentTime(europeAreas);
+    this.getAllCitiesCurrentTime(europeAreas);
     this.getPhotosByCityName();
   }
 
   // error handling allEuropeTimes + adaptive
+  // historical air pollution
 
-  public getAllCitiesCurrentTime(
-    areas: IWorldAreas
-  ): Observable<IClockTime | null>[] {
-    return areas.countriesCapitals.map((city) =>
-      this.timeService
-        .getTimezoneByZoneName(`${europeAreas.areaName}/${city}`)
-        .pipe(
-          switchMap((result: any) =>
-            timer(calculateInitialDelay(), 1000).pipe(
-              takeUntil(this.destroy$$),
-              map(
-                () =>
-                  ({
-                    time: calculateUpdatedDate(
-                      result.raw_offset,
-                      result.dst_offset
-                    ),
-                    timezone: result.timezone,
-                  } as IClockTime)
+  public getAllCitiesCurrentTime(areas: IWorldAreas): void {
+    this.isLoading$ = of(true);
+
+    const timeObservables: Observable<IClockTime | null>[] =
+      areas.countriesCapitals.map((city) =>
+        this.timeService
+          .getTimezoneByZoneName(`${europeAreas.areaName}/${city}`)
+          .pipe(
+            switchMap((result: any) =>
+              timer(calculateInitialDelay(), 1000).pipe(
+                takeUntil(this.destroy$$),
+                map(
+                  () =>
+                    ({
+                      time: calculateUpdatedDate(
+                        result.raw_offset,
+                        result.dst_offset
+                      ),
+                      timezone: result.timezone,
+                    } as IClockTime)
+                )
               )
-            )
-          ),
-          catchError((error: any) => {
-            console.error('Error fetching timezone: ', error);
-            return of(null);
-          })
-        )
-    );
+            ),
+            catchError((error: Error) => {
+              this.timesError$ = of({
+                name: `Error fetching timezone (${error.name})`,
+                message: error.message,
+              } as IHttpError);
+              return of(null);
+            })
+          )
+      );
+
+    let completedSubsCount = 0;
+    timeObservables.forEach((observable) => {
+      observable.pipe(delay(1500)).subscribe({
+        next: () => {
+          completedSubsCount++;
+          if (completedSubsCount === areas.countriesCapitals.length) {
+            this.isLoading$ = of(false);
+          }
+        },
+      });
+    });
+
+    this.allEuropeTimes$ = timeObservables;
   }
 
   public getPhotosByCityName(): void {
