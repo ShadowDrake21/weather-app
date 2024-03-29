@@ -1,4 +1,12 @@
-import { BehaviorSubject, catchError, map, Observable, of, timer } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  delay,
+  map,
+  Observable,
+  of,
+  timer,
+} from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
@@ -56,6 +64,8 @@ export class MainScreenComponent implements OnInit {
   time$ = new Observable<Date | null>();
   timeError$ = new Observable<IHttpError | null>();
 
+  blockElements$$ = new BehaviorSubject<boolean>(false);
+
   ngOnInit(): void {
     this.activePhoto$ = of(this.initialActivePhoto);
   }
@@ -98,7 +108,8 @@ export class MainScreenComponent implements OnInit {
     this.detailedInfoError$ = of(
       getErrorObject(
         'Weather and air pollution ' + error.name,
-        error.error.message
+        error.error.message ??
+          'Unknown Error. You will be able to try again after 5 sec'
       )
     );
     this.time$ = of(null);
@@ -106,6 +117,7 @@ export class MainScreenComponent implements OnInit {
     this.activePhoto$ = of(this.initialActivePhoto);
     this.timeError$ = of(getErrorObject(error.name, error.error.message));
     this.searchForm.disable();
+    this.blockIfError();
   }
 
   public getCityTime(latitude: number, longitude: number) {
@@ -124,6 +136,7 @@ export class MainScreenComponent implements OnInit {
             });
         },
         error: (error) => {
+          console.log('error', error);
           const errorObj: IHttpError = {
             name: error.name,
             message: error.error,
@@ -181,4 +194,12 @@ export class MainScreenComponent implements OnInit {
   public isBtnDisabled = (): boolean => {
     return this.searchForm.disabled;
   };
+
+  private blockIfError() {
+    this.blockElements$$.next(true);
+
+    this.blockElements$$
+      .pipe(delay(5000))
+      .subscribe(() => this.blockElements$$.next(false));
+  }
 }

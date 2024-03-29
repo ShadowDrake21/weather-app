@@ -17,6 +17,13 @@ p {
   margin: 0;
 }
 
+a {
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
 ul,
 li {
   list-style: none;
@@ -93,6 +100,11 @@ body {
   background-color: rgb(71, 82, 196);
 }
 
+.error-reset__btn:disabled {
+  background-color: rgb(19, 23, 77);
+  pointer-events: none;
+}
+
 .air-pollution__info-title.good {
   color: rgb(30, 255, 0);
 }
@@ -110,4 +122,28 @@ body {
 }
 .air-pollution__info-title.unknown {
   color: white;
+}
+
+.link__wrapper {
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  padding: 20px 30px;
+}
+
+.link {
+  color: #000;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+  text-decoration: underline;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.link-icon {
+  width: 40px;
 }
