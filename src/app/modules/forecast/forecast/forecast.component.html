@@ -57,6 +57,14 @@
         [coords]="cityCoords$"
       ></app-forecast-air-pollution>
     </div>
+    <div class="forecast__component">
+      <div class="forecast__subtitle-wrapper">
+        <h2 class="forecast__subtitle">Historical air pollution</h2>
+      </div>
+      <app-historical-air-pollution
+        [coords]="cityCoords$"
+      ></app-historical-air-pollution>
+    </div>
   </div>
   <ng-template #fetchingError>
     <div

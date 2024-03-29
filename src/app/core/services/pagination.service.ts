@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { PagesProportions } from '../../shared/models/generals.model';
 
 @Injectable()
 export class PaginationService {
@@ -47,5 +48,12 @@ export class PaginationService {
 
   public calcNumPages(): number {
     return Math.ceil(this.items$$.value.length / this.itemsPerPage$$.value);
+  }
+
+  public formPagesObservable(): Observable<PagesProportions> {
+    return of({
+      currentPage: this.currentPage$$.value,
+      allPages: this.calcNumPages(),
+    } as PagesProportions);
   }
 }

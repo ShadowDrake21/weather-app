@@ -14,77 +14,99 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
-
 import { ICityCoords } from '../../../../../shared/models/geocoding.model';
 import { AirPollutionService } from '../../../../../core/services/air-pollution.service';
-import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
-import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
-import { convertUnixTimestampToUTC } from '../../../../../shared/utils/dateAndTime.utils';
 import { PaginationService } from '../../../../../core/services/pagination.service';
+import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
 import { IHttpError } from '../../../../../shared/models/error.model';
 import { PagesProportions } from '../../../../../shared/models/generals.model';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  convertDateToUnixTimestamp,
+  convertUnixTimestampToUTC,
+} from '../../../../../shared/utils/dateAndTime.utils';
+import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
 
 @Component({
-  selector: 'app-forecast-air-pollution',
-  templateUrl: './forecast-air-pollution.component.html',
-  styleUrl: './forecast-air-pollution.component.css',
+  selector: 'app-historical-air-pollution',
+  templateUrl: './historical-air-pollution.component.html',
+  styleUrl: './historical-air-pollution.component.css',
 })
-export class ForecastAirPollutionComponent
+export class HistoricalAirPollutionComponent
   implements OnInit, OnChanges, OnDestroy
 {
-  @Input({ required: true, alias: 'coords' }) coords$ =
-    new Observable<ICityCoords>();
-
+  @Input({ required: true, alias: 'coords' }) coords$!: Observable<ICityCoords>;
+  // fix THE problem with air pollutions!
   constructor(
     private airPollutionService: AirPollutionService,
     private paginationService: PaginationService
   ) {}
 
-  airPollutionForecastError$ = new Observable<IHttpError | null>();
-  airPollutionForecast$$ = new BehaviorSubject<IAirPollutionList[]>([]);
-  visibleAirPollutionForecast$$ = new Subject<IAirPollutionList[]>();
+  historicalPollutionError$ = new Observable<IHttpError | null>();
+  historicalAirPollution$$ = new BehaviorSubject<IAirPollutionList[]>([]);
+  visibleHistoricalAirPollution$$ = new Subject<IAirPollutionList[]>();
   pages$ = new Observable<PagesProportions>();
+
+  minDate = new Date('November 27, 2020 00:00:00');
+  maxDate = new Date();
+
+  historicAirPollutionForm = new FormGroup({
+    startDate: new FormControl<Date | null>(null),
+    endDate: new FormControl<Date | null>(null),
+  });
 
   private unsubscribe$$ = new Subject<void>();
 
-  ngOnInit(): void {
-    this.getAirPollutionForecast();
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['coords$'] && !changes['coords$'].firstChange) {
-      this.getAirPollutionForecast();
+      console.log('historical', this.coords$);
     }
   }
 
-  public getAirPollutionForecast() {
+  onSearchPollution() {
+    const startUnix: number = convertDateToUnixTimestamp(
+      this.historicAirPollutionForm.value.startDate!
+    );
+    const endUnix: number = convertDateToUnixTimestamp(
+      this.historicAirPollutionForm.value.endDate!
+    );
+    this.getHistoricalAirPollution(startUnix, endUnix);
+  }
+
+  public getHistoricalAirPollution(start: number, end: number) {
     if (this.coords$) {
       this.coords$
         .pipe(
           switchMap((coords) =>
-            this.airPollutionService.getForecastAirPollutionData(
+            this.airPollutionService.getHistoricalAirPollutionData(
               coords.lat,
-              coords.lon
+              coords.lon,
+              start,
+              end
             )
           ),
           takeUntil(this.unsubscribe$$)
         )
         .subscribe({
           next: (pollutionData) => {
-            this.airPollutionForecast$$.next(pollutionData.list);
+            this.historicalAirPollution$$.next(pollutionData.list);
+            this.historicalAirPollution$$.subscribe(console.log);
             this.paginationService.setItemsPerPage(6);
-            this.paginationService.setItems(this.airPollutionForecast$$);
+            this.paginationService.setItems(this.historicalAirPollution$$);
             this.formPage();
           },
           error: (error) =>
-            (this.airPollutionForecastError$ = of({
+            (this.historicalPollutionError$ = of({
               name: `Error while getting city air polluion (${error.name})`,
               message: error.message,
             } as IHttpError)),
         });
 
       this.paginationService.visibleItems$$.subscribe((visibleItems) => {
-        this.visibleAirPollutionForecast$$.next(visibleItems);
+        this.visibleHistoricalAirPollution$$.next(visibleItems);
+        this.visibleHistoricalAirPollution$$.subscribe(console.log);
       });
     }
   }
@@ -120,6 +142,6 @@ export class ForecastAirPollutionComponent
   ngOnDestroy(): void {
     this.unsubscribe$$.next();
     this.unsubscribe$$.complete();
-    this.airPollutionForecast$$.complete();
+    this.historicalAirPollution$$.complete();
   }
 }
