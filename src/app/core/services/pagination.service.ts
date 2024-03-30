@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
 import { PagesProportions } from '../../shared/models/generals.model';
 
 export class PaginationService {
@@ -7,11 +7,17 @@ export class PaginationService {
   public currentPage$$ = new BehaviorSubject<number>(1);
   private itemsPerPage$$ = new BehaviorSubject<number>(5);
 
+  private itemsSubscription!: Subscription;
+
   public setItems(itemsIn$$: Subject<any>): void {
-    itemsIn$$.subscribe((value: any) => {
+    if (this.itemsSubscription) {
+      this.itemsSubscription.unsubscribe();
+    }
+
+    this.itemsSubscription = itemsIn$$.subscribe((value: any) => {
       this.items$$.next(value);
+      this.updateVisibleItems();
     });
-    this.updateVisibleItems();
   }
 
   public setItemsPerPage(value: number) {
