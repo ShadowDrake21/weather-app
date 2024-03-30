@@ -149,3 +149,17 @@ body {
 .link-icon {
   width: 40px;
 }
+
+.initial__message {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 10px 0 10px 0;
+}
+
+.initial__message-text {
+  color: #000;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  text-align: center;
+}

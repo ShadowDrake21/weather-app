@@ -28,6 +28,7 @@ import { PagesProportions } from '../../../../../shared/models/generals.model';
   selector: 'app-forecast-air-pollution',
   templateUrl: './forecast-air-pollution.component.html',
   styleUrl: './forecast-air-pollution.component.css',
+  providers: [PaginationService],
 })
 export class ForecastAirPollutionComponent
   implements OnInit, OnChanges, OnDestroy
