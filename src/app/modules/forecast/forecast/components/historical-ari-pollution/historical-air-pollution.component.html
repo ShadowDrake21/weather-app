@@ -1,102 +1,133 @@
 <div class="historical-ari__pollution">
   <div class="historical-ari__pollution-wrapper">
-    <div>
-      <mat-form-field class="historical-ari__pollution-form">
-        <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input
-          [formGroup]="historicAirPollutionForm"
-          [rangePicker]="picker"
-          [min]="minDate"
-          [max]="maxDate"
-        >
-          <input
-            matStartDate
-            formControlName="startDate"
-            placeholder="Start date"
-          />
-          <input matEndDate formControlName="endDate" placeholder="End date" />
-        </mat-date-range-input>
-        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="picker"
-        ></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
+    <div class="historical-ari__pollution-form__wrapper">
+      <div class="historical-ari__pollution-form">
+        <mat-form-field>
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input
+            [formGroup]="historicAirPollutionForm"
+            [rangePicker]="picker"
+            [min]="minDate"
+            [max]="maxDate"
+          >
+            <input
+              matStartDate
+              formControlName="startDate"
+              placeholder="Start date"
+            />
+            <input
+              matEndDate
+              formControlName="endDate"
+              placeholder="End date"
+            />
+          </mat-date-range-input>
+          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
 
-        @if(historicAirPollutionForm.controls.startDate.hasError('matStartDateInvalid'))
-        {
-        <mat-error>Invalid start date</mat-error>
-        }
-        @if(historicAirPollutionForm.controls.endDate.hasError('matEndDateInvalid'))
-        {
-        <mat-error>Invalid end date</mat-error>
-        }
-      </mat-form-field>
-      <button type="button" (click)="onSearchPollution()">Search</button>
+          @if(historicAirPollutionForm.controls.startDate.hasError('matStartDateInvalid'))
+          {
+          <mat-error>Invalid start date</mat-error>
+          }
+          @if(historicAirPollutionForm.controls.endDate.hasError('matEndDateInvalid'))
+          {
+          <mat-error>Invalid end date</mat-error>
+          }
+        </mat-form-field>
+        <button
+          type="button"
+          class="search-btn"
+          (click)="onSearchPollution()"
+          [disabled]="historicAirPollutionForm.invalid"
+        >
+          Search
+        </button>
+      </div>
     </div>
     <div
       class="forecast__air-pollution__wrapper"
-      *ngIf="!(historicalAirPollution$$ | async); else fetchingError"
+      *ngIf="!(historicalAirPollutionError$ | async); else fetchingError"
     >
       <div class="container">
-        <div class="forecast__air-pollution">
-          <div
-            *ngIf="pages$ | async as pages"
-            class="forecast__air-pollution__pagination-stats"
-          >
-            <p class="forecast__air-pollution__pagination-stats__item">
-              <span class="forecast__air-pollution__pagination-stats__item-span"
-                >Current page: </span
-              >{{ pages.currentPage }}
-            </p>
-            <p class="forecast__air-pollution__pagination-stats__item">
-              <span class="forecast__air-pollution__pagination-stats__item-span"
-                >All pages: </span
-              >{{ pages.allPages }}
-            </p>
-          </div>
-          <div
-            *ngIf="
-              visibleHistoricalAirPollution$$ | async as visibleAirPollution
-            "
-            class="forecast__air-pollution__list"
-          >
-            <app-forecast-air-pollution-item
-              *ngFor="let pollutionItem of visibleAirPollution"
-              [item]="pollutionItem"
-            ></app-forecast-air-pollution-item>
-          </div>
-          <div class="forecast__air-pollution__pagination">
-            <button
-              type="button"
-              (click)="onPreviousPage()"
-              class="forecast__air-pollution__pagination-btn"
-              [disabled]="isFirstOrLastPage('prev')"
+        <div
+          class="forecast__air-pollution"
+          *ngIf="!(isFirstSearch$ | async); else workBeginning"
+        >
+          <ng-container *ngIf="!(loadingPollutionData$$ | async); else loading">
+            <div
+              *ngIf="pages$ | async as pages"
+              class="forecast__air-pollution__pagination-stats"
             >
-              <img
-                src="/assets/icons/arrows/previous.svg"
-                alt="prev"
-                class="forecast__air-pollution__pagination-btn__img"
-              />
-            </button>
-            <button
-              type="button"
-              (click)="onNextPage()"
-              class="forecast__air-pollution__pagination-btn"
-              [disabled]="isFirstOrLastPage('next')"
+              <p class="forecast__air-pollution__pagination-stats__item">
+                <span
+                  class="forecast__air-pollution__pagination-stats__item-span"
+                  >Current page: </span
+                >{{ pages.currentPage }}
+              </p>
+              <p class="forecast__air-pollution__pagination-stats__item">
+                <span
+                  class="forecast__air-pollution__pagination-stats__item-span"
+                  >All pages: </span
+                >{{ pages.allPages }}
+              </p>
+            </div>
+            <div
+              *ngIf="
+                visibleHistoricalAirPollution$$ | async as visibleAirPollution
+              "
+              class="forecast__air-pollution__list"
             >
-              <img
-                src="/assets/icons/arrows/next.svg"
-                alt="next"
-                class="forecast__air-pollution__pagination-btn__img"
-              />
-            </button>
-          </div>
+              <app-forecast-air-pollution-item
+                *ngFor="let pollutionItem of visibleAirPollution"
+                [item]="pollutionItem"
+              ></app-forecast-air-pollution-item>
+            </div>
+            <div class="forecast__air-pollution__pagination">
+              <button
+                type="button"
+                (click)="onPreviousPage()"
+                class="forecast__air-pollution__pagination-btn"
+                [disabled]="isFirstOrLastPage('prev')"
+              >
+                <img
+                  src="/assets/icons/arrows/previous.svg"
+                  alt="prev"
+                  class="forecast__air-pollution__pagination-btn__img"
+                />
+              </button>
+              <button
+                type="button"
+                (click)="onNextPage()"
+                class="forecast__air-pollution__pagination-btn"
+                [disabled]="isFirstOrLastPage('next')"
+              >
+                <img
+                  src="/assets/icons/arrows/next.svg"
+                  alt="next"
+                  class="forecast__air-pollution__pagination-btn__img"
+                />
+              </button></div
+          ></ng-container>
+          <ng-template #loading>
+            <div class="loader__positioning">
+              <div class="loader"></div>
+            </div>
+          </ng-template>
         </div>
+        <ng-template #workBeginning>
+          <div class="initial__message">
+            <p class="initial__message-text">
+              You have not searched any historical data during this session...
+            </p>
+          </div>
+        </ng-template>
       </div>
     </div>
     <ng-template #fetchingError>
-      <div *ngIf="historicalPollutionError$ | async as error" class="error">
+      <div *ngIf="historicalAirPollutionError$ | async as error" class="error">
         <p class="error__message">
           <span class="error__name">{{ error.name | truncateText : 50 }}:</span
           >{{ error.message | truncateText : 35 }}

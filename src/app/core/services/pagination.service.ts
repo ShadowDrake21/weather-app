@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { PagesProportions } from '../../shared/models/generals.model';
 
-@Injectable()
 export class PaginationService {
   private items$$ = new BehaviorSubject<any[]>([]);
   public visibleItems$$ = new BehaviorSubject<any[]>([]);

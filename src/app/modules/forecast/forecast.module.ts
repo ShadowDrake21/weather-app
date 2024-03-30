@@ -35,6 +35,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [PaginationService, provideNativeDateAdapter()],
+  providers: [provideNativeDateAdapter()],
 })
 export class ForecastModule {}
