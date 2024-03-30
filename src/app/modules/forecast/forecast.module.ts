@@ -15,6 +15,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AirPollutionListComponent } from './forecast/components/air-pollution-list/air-pollution-list.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ForecastAirPollutionComponent,
     ForecastAirPollutionItemComponent,
     HistoricalAirPollutionComponent,
+    AirPollutionListComponent,
   ],
   imports: [
     CommonModule,

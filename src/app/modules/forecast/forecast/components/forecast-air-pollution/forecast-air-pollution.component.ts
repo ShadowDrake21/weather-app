@@ -73,8 +73,7 @@ export class ForecastAirPollutionComponent
         .subscribe({
           next: (pollutionData) => {
             this.airPollutionForecast$$.next(pollutionData.list);
-            this.paginationService.setItemsPerPage(6);
-            this.paginationService.setItems(this.airPollutionForecast$$);
+
             this.formPage();
           },
           error: (error) =>

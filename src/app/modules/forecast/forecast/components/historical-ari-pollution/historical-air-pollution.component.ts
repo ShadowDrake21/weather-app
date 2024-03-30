@@ -74,6 +74,9 @@ export class HistoricalAirPollutionComponent
   }
 
   onSearchPollution() {
+    this.unsubscribe$$.next();
+
+    this.historicalAirPollution$$.next([]);
     this.paginationService.currentPage$$.next(1);
     const startUnix: number = convertDateToUnixTimestamp(
       this.historicAirPollutionForm.value.startDate!
@@ -87,6 +90,7 @@ export class HistoricalAirPollutionComponent
   public getHistoricalAirPollution(start: number, end: number) {
     if (this.coords$) {
       this.loadingPollutionData$$.next(true);
+      this.historicalAirPollution$$.next([]);
       this.coords$
         .pipe(
           switchMap((coords) =>
@@ -104,12 +108,8 @@ export class HistoricalAirPollutionComponent
         .subscribe({
           next: (pollutionData) => {
             this.historicalAirPollution$$.next(pollutionData.list);
-            this.historicalAirPollution$$.subscribe(console.log);
-            this.paginationService.setItemsPerPage(6);
-            this.paginationService.setItems(this.historicalAirPollution$$);
             this.loadingPollutionData$$.next(false);
-
-            this.formPage();
+            console.log('pollutionData', pollutionData);
           },
           error: (error) =>
             (this.historicalAirPollutionError$ = of({
@@ -117,12 +117,6 @@ export class HistoricalAirPollutionComponent
               message: error.message,
             } as IHttpError)),
         });
-
-      this.paginationService.visibleItems$$.subscribe((visibleItems) => {
-        console.log('visible items', visibleItems);
-        this.visibleHistoricalAirPollution$$.next(visibleItems);
-        this.visibleHistoricalAirPollution$$.subscribe(console.log);
-      });
     }
   }
 
