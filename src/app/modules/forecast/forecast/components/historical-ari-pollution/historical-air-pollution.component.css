@@ -1,0 +1,103 @@
+.historical-ari__pollution {
+  padding-top: 25px;
+}
+
+.historical-ari__pollution-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.historical-ari__pollution-form__wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.historical-ari__pollution-form {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px 40px;
+  border-radius: 5px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.historical__air-pollution__list-wrapper {
+  padding-top: 20px;
+}
+
+.search-btn {
+  outline: 0;
+  grid-gap: 8px;
+  align-items: center;
+  background: 0 0;
+  border: 1px solid #000;
+  background-color: #c4c4c4;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 16px;
+  gap: 8px;
+  justify-content: center;
+  line-height: 1.5;
+  font-weight: 700;
+  overflow: hidden;
+  padding: 15px 16px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  transition: all 0.14s ease-out;
+  white-space: nowrap;
+}
+
+.search-btn:hover {
+  box-shadow: 4px 4px 0 #000;
+  transform: translate(-4px, -4px);
+}
+
+.search-btn:focus-visible {
+  outline-offset: 1px;
+}
+
+.search-btn:disabled {
+  background-color: #7e7e7ead;
+  color: #cacaca;
+}
+.search-btn:disabled:hover {
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.historical-air__pollution-loader__positioning {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.hidden__items {
+  display: none;
+}
+
+.loader {
+  width: fit-content;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  background: linear-gradient(90deg, #000 50%, #0000 0) right/200% 100%;
+  animation: l21 2s infinite linear;
+}
+.loader::before {
+  content: "Loading...";
+  color: #0000;
+  padding: 0 5px;
+  background: inherit;
+  background-image: linear-gradient(90deg, #fff 50%, #000 0);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@keyframes l21 {
+  100% {
+    background-position: left;
+  }
+}

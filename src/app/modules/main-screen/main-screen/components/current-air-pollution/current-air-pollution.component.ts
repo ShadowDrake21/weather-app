@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Subject } from 'rxjs';
+
 import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
 import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
 

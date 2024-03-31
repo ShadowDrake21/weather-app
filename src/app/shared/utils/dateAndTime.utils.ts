@@ -21,3 +21,7 @@ export function convertUnixTimestampToUTC(timestamp: number) {
 
   return utcDate.toUTCString();
 }
+
+export function convertDateToUnixTimestamp(date: Date) {
+  return Math.floor(date.getTime() / 1000);
+}

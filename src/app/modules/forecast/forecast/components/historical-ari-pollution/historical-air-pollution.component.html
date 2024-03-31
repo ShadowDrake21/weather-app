@@ -1,0 +1,88 @@
+<div class="historical-ari__pollution">
+  <div class="historical-ari__pollution-wrapper">
+    <div class="historical-ari__pollution-form__wrapper">
+      <div class="historical-ari__pollution-form">
+        <mat-form-field>
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input
+            [formGroup]="historicAirPollutionForm"
+            [rangePicker]="picker"
+            [min]="minDate"
+            [max]="maxDate"
+          >
+            <input
+              matStartDate
+              formControlName="startDate"
+              placeholder="Start date"
+            />
+            <input
+              matEndDate
+              formControlName="endDate"
+              placeholder="End date"
+            />
+          </mat-date-range-input>
+          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+
+          @if(historicAirPollutionForm.controls.startDate.hasError('matStartDateInvalid'))
+          {
+          <mat-error>Invalid start date</mat-error>
+          }
+          @if(historicAirPollutionForm.controls.endDate.hasError('matEndDateInvalid'))
+          {
+          <mat-error>Invalid end date</mat-error>
+          }
+        </mat-form-field>
+        <button
+          type="button"
+          class="search-btn"
+          (click)="onSearchPollution()"
+          [disabled]="historicAirPollutionForm.invalid"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+    <div
+      class="historical__air-pollution__list-wrapper"
+      *ngIf="!(historicalAirPollutionError$ | async); else fetchingError"
+    >
+      <div class="container">
+        <div class="historical-air__pollution-list">
+          <div *ngIf="loadingPollutionData$$ | async">
+            <div class="historical-air__pollution-loader__positioning">
+              <div class="loader"></div>
+            </div>
+          </div>
+          <div
+            *ngIf="!(isFirstSearch$ | async); else workBeginning"
+            [class.hidden__items]="loadingPollutionData$$ | async"
+          >
+            <app-air-pollution-list
+              [items]="historicalAirPollution$$"
+            ></app-air-pollution-list>
+          </div>
+        </div>
+        <ng-template #workBeginning>
+          <div class="initial__message">
+            <p class="initial__message-text">
+              You have not searched any historical data during this session...
+            </p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <ng-template #fetchingError>
+      <div *ngIf="historicalAirPollutionError$ | async as error" class="error">
+        <p class="error__message">
+          <span class="error__name">{{ error.name | truncateText : 50 }}:</span
+          >{{ error.message | truncateText : 35 }}
+        </p>
+      </div>
+    </ng-template>
+  </div>
+</div>
