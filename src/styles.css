@@ -163,3 +163,16 @@ body {
   font-weight: 700;
   text-align: center;
 }
+
+@media (max-width: 600px) {
+  .link__wrapper {
+    padding: 15px 20px;
+  }
+}
+
+@media (max-width: 450px) {
+  .link {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}

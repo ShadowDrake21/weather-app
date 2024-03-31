@@ -1,0 +1,25 @@
+.footer {
+  background-color: #000000;
+  padding: 30px 20px;
+  margin: auto 0;
+}
+.footer__copyright {
+  text-align: center;
+}
+.footer__copyright-link {
+  color: white;
+  text-decoration: none;
+  transition: 0.2s all ease-in-out;
+}
+.footer__copyright-link:hover {
+  text-decoration: underline;
+}
+@media (max-width: 684px) {
+  .footer {
+    padding: 20px 15px;
+  }
+  .footer__copyright {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
