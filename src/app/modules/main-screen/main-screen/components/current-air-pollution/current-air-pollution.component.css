@@ -14,6 +14,7 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 15px 25px;
 }
 
@@ -25,4 +26,25 @@
 
 .current__air-pollution__info-list__item-span {
   font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .air-pollution__info-title {
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
+
+@media (max-width: 500px) {
+  .air-pollution__info-title {
+    font-size: 22px;
+    line-height: 26px;
+  }
+}
+
+@media (max-width: 400px) {
+  .air-pollution__info-title {
+    font-size: 20px;
+    line-height: 24px;
+  }
 }

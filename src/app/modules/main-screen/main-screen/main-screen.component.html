@@ -68,10 +68,10 @@
                 {{ time | date : "mediumDate" }}
               </h3>
             </div>
-            <div class="main-screen__time-item">
+            <div class="main-screen__time-item timezone">
               <span class="main-screen__time-item__span">Timezone:</span>
               <h4 class="main-screen__time-item__title timezone">
-                {{ timezone.timezone }}
+                {{ timezone.timezone | truncateText : 20 }}
               </h4>
             </div>
           </ng-container>

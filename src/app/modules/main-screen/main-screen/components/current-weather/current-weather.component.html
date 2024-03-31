@@ -8,7 +8,7 @@
         alt="city"
       />
       <span class="current-weather__info-block__item-span">City name:</span
-      >{{ weather.name }}
+      >{{ weather.name | truncateText : 20 }}
     </div>
     <p
       *ngIf="weather.sys as weatherSys"
