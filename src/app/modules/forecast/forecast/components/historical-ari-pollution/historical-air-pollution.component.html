@@ -48,24 +48,24 @@
       </div>
     </div>
     <div
-      class="forecast__air-pollution__wrapper"
+      class="historical__air-pollution__list-wrapper"
       *ngIf="!(historicalAirPollutionError$ | async); else fetchingError"
     >
       <div class="container">
-        <div
-          class="forecast__air-pollution"
-          *ngIf="!(isFirstSearch$ | async); else workBeginning"
-        >
-          <ng-container *ngIf="!(loadingPollutionData$$ | async); else loading">
+        <div class="historical-air__pollution-list">
+          <div *ngIf="loadingPollutionData$$ | async">
+            <div class="historical-air__pollution-loader__positioning">
+              <div class="loader"></div>
+            </div>
+          </div>
+          <div
+            *ngIf="!(isFirstSearch$ | async); else workBeginning"
+            [class.hidden__items]="loadingPollutionData$$ | async"
+          >
             <app-air-pollution-list
               [items]="historicalAirPollution$$"
             ></app-air-pollution-list>
-          </ng-container>
-          <ng-template #loading>
-            <div class="loader__positioning">
-              <div class="loader"></div>
-            </div>
-          </ng-template>
+          </div>
         </div>
         <ng-template #workBeginning>
           <div class="initial__message">

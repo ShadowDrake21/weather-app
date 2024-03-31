@@ -120,7 +120,7 @@ body {
   color: rgb(255, 0, 0);
 }
 .air-pollution__info-title.very-poor {
-  color: rgb(97, 0, 0);
+  color: rgb(225, 0, 255);
 }
 .air-pollution__info-title.unknown {
   color: white;
