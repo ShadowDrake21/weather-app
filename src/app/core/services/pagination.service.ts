@@ -1,18 +1,23 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
+import { PagesProportions } from '../../shared/models/generals.model';
 
-@Injectable()
 export class PaginationService {
   private items$$ = new BehaviorSubject<any[]>([]);
   public visibleItems$$ = new BehaviorSubject<any[]>([]);
   public currentPage$$ = new BehaviorSubject<number>(1);
   private itemsPerPage$$ = new BehaviorSubject<number>(5);
 
+  private itemsSubscription!: Subscription;
+
   public setItems(itemsIn$$: Subject<any>): void {
-    itemsIn$$.subscribe((value: any) => {
+    if (this.itemsSubscription) {
+      this.itemsSubscription.unsubscribe();
+    }
+
+    this.itemsSubscription = itemsIn$$.subscribe((value: any) => {
       this.items$$.next(value);
+      this.updateVisibleItems();
     });
-    this.updateVisibleItems();
   }
 
   public setItemsPerPage(value: number) {
@@ -47,5 +52,12 @@ export class PaginationService {
 
   public calcNumPages(): number {
     return Math.ceil(this.items$$.value.length / this.itemsPerPage$$.value);
+  }
+
+  public formPagesObservable(): Observable<PagesProportions> {
+    return of({
+      currentPage: this.currentPage$$.value,
+      allPages: this.calcNumPages(),
+    } as PagesProportions);
   }
 }

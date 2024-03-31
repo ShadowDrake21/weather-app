@@ -37,8 +37,8 @@ export class AirPollutionService {
   public getHistoricalAirPollutionData(
     lat: number,
     lon: number,
-    start: string,
-    end: string
+    start: number,
+    end: number
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
       `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${environment.weatherApiKey}`

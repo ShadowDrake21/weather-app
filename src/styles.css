@@ -1,3 +1,5 @@
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+
 html,
 *::after,
 *::before {
@@ -118,7 +120,7 @@ body {
   color: rgb(255, 0, 0);
 }
 .air-pollution__info-title.very-poor {
-  color: rgb(97, 0, 0);
+  color: rgb(225, 0, 255);
 }
 .air-pollution__info-title.unknown {
   color: white;
@@ -146,4 +148,18 @@ body {
 
 .link-icon {
   width: 40px;
+}
+
+.initial__message {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 10px 0 10px 0;
+}
+
+.initial__message-text {
+  color: #000;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  text-align: center;
 }

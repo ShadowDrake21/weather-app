@@ -168,7 +168,6 @@
   align-items: center;
 }
 
-/* HTML: <div class="loader"></div> */
 .loader {
   margin-top: 25px;
   width: 120px;
@@ -193,6 +192,7 @@
   clip-path: polygon(0 5%, 100% 0, 100% 100%, 0 95%, -30px 50%);
   animation: l14 1s infinite linear;
 }
+
 @keyframes l14 {
   100% {
     left: calc(100% + 20px);
