@@ -3,7 +3,10 @@
   [ngStyle]="{ 'background-image': 'url(' + (queryBgPath$ | async) + ')' }"
 >
   <div class="forecast__title-wrapper">
-    <h1 class="forecast__title">City: {{ activeCityName$ | async }}</h1>
+    <h1 class="forecast__title">
+      City:
+      {{ (activeCityName$ | async) ?? "Unknown city" | truncateText : 10 }}
+    </h1>
     <div class="forecast__title-changer" #changer>
       <div
         class="forecast__title-changer__img-wrapper"
@@ -47,7 +50,7 @@
         [items]="forecasts.list"
       ></app-forecast-slider>
     </div>
-    <div class="forecast__component">
+    <!-- <div class="forecast__component">
       <div class="forecast__subtitle-wrapper">
         <h2 class="forecast__subtitle">
           4 day / 1 hour air pollution forecast
@@ -56,15 +59,15 @@
       <app-forecast-air-pollution
         [coords]="cityCoords$"
       ></app-forecast-air-pollution>
-    </div>
-    <div class="forecast__component">
+    </div> -->
+    <!-- <div class="forecast__component">
       <div class="forecast__subtitle-wrapper">
         <h2 class="forecast__subtitle">Historical air pollution</h2>
       </div>
       <app-historical-air-pollution
         [coords]="cityCoords$"
       ></app-historical-air-pollution>
-    </div>
+    </div> -->
   </div>
   <ng-template #fetchingError>
     <div
