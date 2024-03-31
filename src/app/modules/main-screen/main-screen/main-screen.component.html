@@ -90,6 +90,14 @@
       </div>
     </div>
     <div class="main-screen__info">
+      <div
+        *ngIf="(weather$$ | async) === null"
+        class="main-screen__info-initial"
+      >
+        <h3 class="main-screen__info-initial__title">
+          {{ "Search weather info..." | uppercase }}
+        </h3>
+      </div>
       <div class="container">
         <div
           *ngIf="detailedInfoError$ | async as error"
