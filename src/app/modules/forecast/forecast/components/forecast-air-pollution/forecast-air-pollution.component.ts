@@ -18,8 +18,6 @@ import {
 import { ICityCoords } from '../../../../../shared/models/geocoding.model';
 import { AirPollutionService } from '../../../../../core/services/air-pollution.service';
 import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
-import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
-import { convertUnixTimestampToUTC } from '../../../../../shared/utils/dateAndTime.utils';
 import { PaginationService } from '../../../../../core/services/pagination.service';
 import { IHttpError } from '../../../../../shared/models/error.model';
 import { PagesProportions } from '../../../../../shared/models/generals.model';
@@ -36,10 +34,7 @@ export class ForecastAirPollutionComponent
   @Input({ required: true, alias: 'coords' }) coords$ =
     new Observable<ICityCoords>();
 
-  constructor(
-    private airPollutionService: AirPollutionService,
-    private paginationService: PaginationService
-  ) {}
+  constructor(private airPollutionService: AirPollutionService) {}
 
   airPollutionForecastError$ = new Observable<IHttpError | null>();
   airPollutionForecast$$ = new BehaviorSubject<IAirPollutionList[]>([]);
@@ -73,8 +68,6 @@ export class ForecastAirPollutionComponent
         .subscribe({
           next: (pollutionData) => {
             this.airPollutionForecast$$.next(pollutionData.list);
-
-            this.formPage();
           },
           error: (error) =>
             (this.airPollutionForecastError$ = of({
@@ -82,40 +75,8 @@ export class ForecastAirPollutionComponent
               message: error.message,
             } as IHttpError)),
         });
-
-      this.paginationService.visibleItems$$.subscribe((visibleItems) => {
-        this.visibleAirPollutionForecast$$.next(visibleItems);
-      });
     }
   }
-
-  private formPage() {
-    this.pages$ = this.paginationService.formPagesObservable();
-  }
-
-  public onNextPage = (): void => {
-    this.paginationService.nextPage();
-    this.formPage();
-  };
-
-  public onPreviousPage = (): void => {
-    this.paginationService.previousPage();
-    this.formPage();
-  };
-
-  public isFirstOrLastPage = (type: 'prev' | 'next'): boolean => {
-    if (type === 'prev') {
-      return this.paginationService.currentPage$$.value === 1;
-    } else {
-      return (
-        this.paginationService.currentPage$$.value ===
-        this.paginationService.calcNumPages()
-      );
-    }
-  };
-
-  public getAirQualityText = getAirQualityText;
-  public convertUnixTimestampToUTC = convertUnixTimestampToUTC;
 
   ngOnDestroy(): void {
     this.unsubscribe$$.next();

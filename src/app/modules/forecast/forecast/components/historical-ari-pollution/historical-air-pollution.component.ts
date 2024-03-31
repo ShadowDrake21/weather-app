@@ -8,27 +8,22 @@ import {
 } from '@angular/core';
 import {
   BehaviorSubject,
-  delay,
   Observable,
   of,
   Subject,
   switchMap,
   takeUntil,
-  tap,
   timer,
 } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { ICityCoords } from '../../../../../shared/models/geocoding.model';
 import { AirPollutionService } from '../../../../../core/services/air-pollution.service';
 import { PaginationService } from '../../../../../core/services/pagination.service';
 import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
 import { IHttpError } from '../../../../../shared/models/error.model';
 import { PagesProportions } from '../../../../../shared/models/generals.model';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  convertDateToUnixTimestamp,
-  convertUnixTimestampToUTC,
-} from '../../../../../shared/utils/dateAndTime.utils';
-import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
+import { convertDateToUnixTimestamp } from '../../../../../shared/utils/dateAndTime.utils';
 
 @Component({
   selector: 'app-historical-air-pollution',
@@ -36,19 +31,14 @@ import { getAirQualityText } from '../../../../../shared/utils/generals.utils';
   styleUrl: './historical-air-pollution.component.css',
   providers: [PaginationService],
 })
-export class HistoricalAirPollutionComponent
-  implements OnInit, OnChanges, OnDestroy
-{
+export class HistoricalAirPollutionComponent implements OnInit, OnDestroy {
   @Input({ required: true, alias: 'coords' }) coords$!: Observable<ICityCoords>;
-  constructor(
-    private airPollutionService: AirPollutionService,
-    private paginationService: PaginationService
-  ) {}
+  constructor(private airPollutionService: AirPollutionService) {}
 
   isFirstSearch$: Observable<boolean> = of(true);
 
   historicalAirPollutionError$ = new Observable<IHttpError | null>();
-  loadingPollutionData$$ = new BehaviorSubject<boolean>(false);
+  loadingPollutionData$$ = new Subject<boolean>();
   historicalAirPollution$$ = new BehaviorSubject<IAirPollutionList[]>([]);
   visibleHistoricalAirPollution$$ = new BehaviorSubject<IAirPollutionList[]>(
     []
@@ -67,30 +57,23 @@ export class HistoricalAirPollutionComponent
 
   ngOnInit(): void {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['coords$'] && !changes['coords$'].firstChange) {
-      console.log('historical', this.coords$);
-    }
-  }
-
   onSearchPollution() {
-    this.unsubscribe$$.next();
-
+    this.isFirstSearch$ = of(false);
     this.historicalAirPollution$$.next([]);
-    this.paginationService.currentPage$$.next(1);
+    this.loadingPollutionData$$.next(true);
+
     const startUnix: number = convertDateToUnixTimestamp(
       this.historicAirPollutionForm.value.startDate!
     );
     const endUnix: number = convertDateToUnixTimestamp(
       this.historicAirPollutionForm.value.endDate!
     );
+
     this.getHistoricalAirPollution(startUnix, endUnix);
   }
 
   public getHistoricalAirPollution(start: number, end: number) {
     if (this.coords$) {
-      this.loadingPollutionData$$.next(true);
-      this.historicalAirPollution$$.next([]);
       this.coords$
         .pipe(
           switchMap((coords) =>
@@ -101,15 +84,15 @@ export class HistoricalAirPollutionComponent
               end
             )
           ),
-          tap(() => (this.isFirstSearch$ = of(false))),
-          takeUntil(this.unsubscribe$$),
-          delay(2000)
+
+          takeUntil(this.unsubscribe$$)
         )
         .subscribe({
           next: (pollutionData) => {
-            this.historicalAirPollution$$.next(pollutionData.list);
-            this.loadingPollutionData$$.next(false);
-            console.log('pollutionData', pollutionData);
+            timer(2000).subscribe(() => {
+              this.historicalAirPollution$$.next(pollutionData.list);
+              this.loadingPollutionData$$.next(false);
+            });
           },
           error: (error) =>
             (this.historicalAirPollutionError$ = of({
@@ -119,34 +102,6 @@ export class HistoricalAirPollutionComponent
         });
     }
   }
-
-  private formPage() {
-    this.pages$ = this.paginationService.formPagesObservable();
-  }
-
-  public onNextPage = (): void => {
-    this.paginationService.nextPage();
-    this.formPage();
-  };
-
-  public onPreviousPage = (): void => {
-    this.paginationService.previousPage();
-    this.formPage();
-  };
-
-  public isFirstOrLastPage = (type: 'prev' | 'next'): boolean => {
-    if (type === 'prev') {
-      return this.paginationService.currentPage$$.value === 1;
-    } else {
-      return (
-        this.paginationService.currentPage$$.value ===
-        this.paginationService.calcNumPages()
-      );
-    }
-  };
-
-  public getAirQualityText = getAirQualityText;
-  public convertUnixTimestampToUTC = convertUnixTimestampToUTC;
 
   ngOnDestroy(): void {
     this.unsubscribe$$.next();

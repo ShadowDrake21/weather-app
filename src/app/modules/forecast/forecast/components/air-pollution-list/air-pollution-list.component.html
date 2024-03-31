@@ -1,50 +1,49 @@
-<div
-  *ngIf="pages$ | async as pages"
-  class="forecast__air-pollution__pagination-stats"
->
-  <p class="forecast__air-pollution__pagination-stats__item">
-    <span class="forecast__air-pollution__pagination-stats__item-span"
-      >Current page: </span
-    >{{ pages.currentPage }}
-  </p>
-  <p class="forecast__air-pollution__pagination-stats__item">
-    <span class="forecast__air-pollution__pagination-stats__item-span"
-      >All pages: </span
-    >{{ pages.allPages }}
-  </p>
-</div>
-<div
-  *ngIf="visibleItems$$ | async as visibleAirPollution"
-  class="forecast__air-pollution__list"
->
-  <app-forecast-air-pollution-item
-    *ngFor="let pollutionItem of visibleAirPollution"
-    [item]="pollutionItem"
-  ></app-forecast-air-pollution-item>
-</div>
-<div class="forecast__air-pollution__pagination">
-  <button
-    type="button"
-    (click)="onPreviousPage()"
-    class="forecast__air-pollution__pagination-btn"
-    [disabled]="isFirstOrLastPage('prev')"
-  >
-    <img
-      src="/assets/icons/arrows/previous.svg"
-      alt="prev"
-      class="forecast__air-pollution__pagination-btn__img"
-    />
-  </button>
-  <button
-    type="button"
-    (click)="onNextPage()"
-    class="forecast__air-pollution__pagination-btn"
-    [disabled]="isFirstOrLastPage('next')"
-  >
-    <img
-      src="/assets/icons/arrows/next.svg"
-      alt="next"
-      class="forecast__air-pollution__pagination-btn__img"
-    />
-  </button>
+<div *ngIf="visibleItems$$ | async as visibleAirPollution">
+  <div class="forecast__air-pollution__pagination-stats">
+    <ng-container *ngIf="pages$ | async as pages">
+      <p class="forecast__air-pollution__pagination-stats__item">
+        <span class="forecast__air-pollution__pagination-stats__item-span"
+          >Current page: </span
+        >{{ pages.currentPage }}
+      </p>
+      <p class="forecast__air-pollution__pagination-stats__item">
+        <span class="forecast__air-pollution__pagination-stats__item-span"
+          >All pages: </span
+        >{{ pages.allPages }}
+      </p></ng-container
+    >
+  </div>
+  <div class="forecast__air-pollution__list">
+    <app-forecast-air-pollution-item
+      *ngFor="let pollutionItem of visibleAirPollution"
+      [item]="pollutionItem"
+    ></app-forecast-air-pollution-item>
+  </div>
+  <div class="forecast__air-pollution__pagination">
+    <ng-container *ngIf="pages$ | async as pages">
+      <button
+        type="button"
+        (click)="onPreviousPage()"
+        class="forecast__air-pollution__pagination-btn"
+        [disabled]="isFirstOrLastPage('prev')"
+      >
+        <img
+          src="/assets/icons/arrows/previous.svg"
+          alt="prev"
+          class="forecast__air-pollution__pagination-btn__img"
+        />
+      </button>
+      <button
+        type="button"
+        (click)="onNextPage()"
+        class="forecast__air-pollution__pagination-btn"
+        [disabled]="isFirstOrLastPage('next')"
+      >
+        <img
+          src="/assets/icons/arrows/next.svg"
+          alt="next"
+          class="forecast__air-pollution__pagination-btn__img"
+        /></button
+    ></ng-container>
+  </div>
 </div>

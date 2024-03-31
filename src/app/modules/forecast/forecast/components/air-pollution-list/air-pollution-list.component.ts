@@ -1,12 +1,6 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+
 import { IAirPollutionList } from '../../../../../shared/models/airpollution.model';
 import { PaginationService } from '../../../../../core/services/pagination.service';
 import { PagesProportions } from '../../../../../shared/models/generals.model';
@@ -31,7 +25,6 @@ export class AirPollutionListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.items$$.subscribe((items) => {
-      console.log('items', items);
       if (items) {
         this.setPagination();
       }
