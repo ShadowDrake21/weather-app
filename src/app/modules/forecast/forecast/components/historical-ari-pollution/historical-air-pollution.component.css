@@ -101,3 +101,41 @@
     background-position: left;
   }
 }
+
+@media (max-width: 600px) {
+  .historical-ari__pollution-form {
+    padding: 20px 30px;
+  }
+
+  .loader {
+    font-size: 28px;
+  }
+
+  .search-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .historical-ari__pollution-form {
+    padding: 20px 15px;
+    width: 270px;
+    flex-direction: column;
+    align-self: center;
+  }
+
+  .search-btn {
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .mat-mdc-form-field-hint-wrapper {
+    display: none;
+  }
+
+  .loader {
+    font-size: 26px;
+  }
+}
