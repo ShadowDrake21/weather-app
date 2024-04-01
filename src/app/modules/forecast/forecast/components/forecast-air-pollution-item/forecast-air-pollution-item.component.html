@@ -2,7 +2,7 @@
   *ngIf="pollutionItem$ | async as pollutionData"
   class="forecast__air-pollution__info"
 >
-  <h2>
+  <h2 class="forecast__air-pollution__info-time">
     {{ convertUnixTimestampToUTC(pollutionItem.dt) | date : "short" }}
   </h2>
   <h4
