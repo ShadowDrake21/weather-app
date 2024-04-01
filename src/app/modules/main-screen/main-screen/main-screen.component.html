@@ -24,8 +24,12 @@
             />Go to 5 days forecast</a
           >
         </div>
-        <div class="link__wrapper" *ngIf="!(blockElements$$ | async)">
-          <a class="link" routerLink="/clocks"
+        <div
+          class="link__wrapper"
+          *ngIf="!(blockElements$$ | async)"
+          [class.hide]="clocksLinkClicked$$ | async"
+        >
+          <a class="link" routerLink="/clocks" (click)="handleClocksClick()"
             ><img class="link-icon" src="/assets/icons/clock.svg" alt="clock" />
             Go to the clocks page</a
           >

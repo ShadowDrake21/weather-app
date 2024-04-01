@@ -210,6 +210,10 @@
   animation: l14 1s infinite linear;
 }
 
+.link__wrapper.hide {
+  display: none;
+}
+
 @keyframes l14 {
   100% {
     left: calc(100% + 20px);

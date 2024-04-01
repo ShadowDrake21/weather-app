@@ -22,6 +22,7 @@ import { IWorldAreas } from '../../../shared/models/world-areas.model';
 import { UnsplashService } from '../../../core/services/unsplash.service';
 import { IPhotoInfo } from '../../../shared/models/photo.model';
 import { IHttpError } from '../../../shared/models/error.model';
+import { shuffleArray } from '../../../shared/utils/arrrays.utils';
 
 @Component({
   selector: 'app-clocks',
@@ -96,19 +97,14 @@ export class ClocksComponent implements OnInit, OnDestroy {
   }
 
   public getPhotosByCityName(): void {
-    // this.unsplashService
-    //   .getPhotos('Europe')
-    //   .subscribe((photos: IPhotoInfo[]) => {
-    //     console.log('photos', photos);
-    //     const shuffledPhotos = shuffleArray(photos);
-    //     this.photo$ = of(
-    //       shuffledPhotos[Math.floor(Math.random() * shuffledPhotos.length)]
-    //     );
-    //   });
-    this.photo$ = of({
-      url: 'https://images.unsplash.com/photo-1473951574080-01fe45ec8643?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODEyOTZ8MHwxfHNlYXJjaHw4fHxFdXJvcGV8ZW58MHx8fHwxNzExNjEwNjU2fDA&ixlib=rb-4.0.3&q=80&w=1080',
-      orientation: 'landscape',
-    } as IPhotoInfo);
+    this.unsplashService
+      .getPhotos('Europe')
+      .subscribe((photos: IPhotoInfo[]) => {
+        const shuffledPhotos = shuffleArray(photos);
+        this.photo$ = of(
+          shuffledPhotos[Math.floor(Math.random() * shuffledPhotos.length)]
+        );
+      });
   }
 
   ngOnDestroy(): void {
