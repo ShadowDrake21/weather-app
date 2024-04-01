@@ -5,9 +5,11 @@ import {
   map,
   Observable,
   of,
+  takeUntil,
+  tap,
   timer,
 } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { WeatherService } from '../../../core/services/weather.service';
@@ -31,7 +33,7 @@ import { getErrorObject } from '../../../shared/utils/errorHandling.utils';
   templateUrl: './main-screen.component.html',
   styleUrl: './main-screen.component.css',
 })
-export class MainScreenComponent implements OnInit {
+export class MainScreenComponent implements OnInit, OnDestroy {
   constructor(
     private weatherService: WeatherService,
     private airPollutionService: AirPollutionService,
@@ -45,10 +47,10 @@ export class MainScreenComponent implements OnInit {
 
   initialActivePhoto: IPhotoInfo = {
     url: '/assets/background-img.jpg',
-    // url: 'https://images.unsplash.com/photo-1629814696209-4f4faf2ab874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODEyOTZ8MHwxfHNlYXJjaHw5fHxLcmFrJUMzJUIzd3xlbnwwfHx8fDE3MTA5NDY3Njd8MA&ixlib=rb-4.0.3&q=80&w=1080',
     orientation: 'landscape',
   };
 
+  clocksLinkClicked$$ = new BehaviorSubject<boolean>(false);
   detailedInfoError$ = new Observable<IHttpError | null>();
 
   weather$$ = new BehaviorSubject<IWeatherByNow | null>(null);
@@ -67,6 +69,11 @@ export class MainScreenComponent implements OnInit {
   blockElements$$ = new BehaviorSubject<boolean>(false);
 
   ngOnInit(): void {
+    if (localStorage.getItem('clocksClicked') === 'true') {
+      this.clocksLinkClicked$$.next(true);
+    } else {
+      this.clocksLinkClicked$$.next(false);
+    }
     this.activePhoto$ = of(this.initialActivePhoto);
   }
 
@@ -83,6 +90,7 @@ export class MainScreenComponent implements OnInit {
     this.weatherService
       .getCurrentWeatherByName(this.searchForm.value.cityName)
       .pipe(
+        tap(() => this.setToLocalStorage(true)),
         catchError((error) => {
           this.catchErrorByIncorrectName(error);
           return of(null);
@@ -102,6 +110,30 @@ export class MainScreenComponent implements OnInit {
           );
         },
       });
+  }
+
+  private setToLocalStorage(value: boolean) {
+    localStorage.setItem('wasSearch', value.toString());
+  }
+
+  private removeFromLocalStorage() {
+    localStorage.removeItem('wasSearch');
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event: Event) {
+    if (localStorage.getItem('wasSearch')) {
+      localStorage.removeItem('wasSearch');
+    }
+  }
+
+  public handleClocksClick() {
+    this.clocksLinkClicked$$.next(true);
+    localStorage.setItem('clocksClicked', JSON.stringify(true));
+
+    timer(30000).subscribe(() => {
+      localStorage.removeItem('clocksClicked');
+    });
   }
 
   private catchErrorByIncorrectName(error: any) {
@@ -136,7 +168,6 @@ export class MainScreenComponent implements OnInit {
             });
         },
         error: (error) => {
-          console.log('error', error);
           const errorObj: IHttpError = {
             name: error.name,
             message: error.error,
@@ -201,5 +232,9 @@ export class MainScreenComponent implements OnInit {
     this.blockElements$$
       .pipe(delay(5000))
       .subscribe(() => this.blockElements$$.next(false));
+  }
+
+  ngOnDestroy(): void {
+    this.removeFromLocalStorage();
   }
 }
