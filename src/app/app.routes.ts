@@ -24,5 +24,5 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./modules/clocks/clocks.module').then((m) => m.ClocksModule),
   },
-  { path: '**', component: MainScreenModule },
+  { path: '**', redirectTo: '/main' },
 ];
