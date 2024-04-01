@@ -26,3 +26,38 @@
 .forecast__air-pollution__info-list__item-span {
   font-weight: 700;
 }
+
+@media (max-width: 820px) {
+  .forecast__air-pollution__info {
+    padding: 15px 10px;
+  }
+}
+
+@media (max-width: 720px) {
+  .forecast__air-pollution__info {
+    width: 175px;
+  }
+
+  .forecast__air-pollution__info-time {
+    font-size: 1.25em;
+  }
+}
+
+@media (max-width: 650px) {
+  .air-pollution__info-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+@media (max-width: 650px) {
+  .forecast__air-pollution__info {
+    width: 155px;
+  }
+}
+
+@media (max-width: 590px) {
+  .forecast__air-pollution__info {
+    width: 155px;
+  }
+}

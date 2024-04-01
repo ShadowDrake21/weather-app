@@ -99,3 +99,49 @@
     transform: rotate(1turn);
   }
 }
+
+@media (max-width: 800px) {
+  .clocks__title {
+    font-size: 38px;
+    line-height: 44px;
+  }
+}
+
+@media (max-width: 800px) {
+  .clocks__title {
+    font-size: 34px;
+    line-height: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .clocks__title {
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .clocks__list {
+    justify-content: center;
+  }
+
+  .clocks__link-wrapper {
+    width: 280px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .clocks__title {
+    font-size: 26px;
+    line-height: 32px;
+  }
+
+  .clocks__link-wrapper {
+    width: 250px;
+    margin: 10px auto 0;
+  }
+
+  .clocks__link img {
+    width: 30px;
+  }
+}

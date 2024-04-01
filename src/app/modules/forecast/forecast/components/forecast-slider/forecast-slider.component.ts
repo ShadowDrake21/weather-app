@@ -49,28 +49,47 @@ export class ForecastSliderComponent implements OnInit, OnDestroy {
     const mouseDown$ = fromEvent(sliderNative, 'mousedown');
     const mouseLeave$ = fromEvent(sliderNative, 'mouseleave');
     const mouseUp$ = fromEvent(sliderNative, 'mouseup');
-    const stop$ = merge(mouseLeave$, mouseUp$);
+    const touchStart$ = fromEvent(sliderNative, 'touchstart');
+    const touchEnd$ = fromEvent(sliderNative, 'touchend');
+    const stop$ = merge(mouseLeave$, mouseUp$, touchEnd$);
     const mouseMove$ = fromEvent(sliderNative, 'mousemove');
+    const touchMove$ = fromEvent(sliderNative, 'touchmove');
 
     this.active$ = merge(
       mouseDown$.pipe(map(() => true)),
+      touchStart$.pipe(map(() => true)),
       stop$.pipe(map(() => false))
     ).pipe(startWith(false));
 
-    this.subscription = mouseDown$
+    this.subscription = merge(mouseDown$, touchStart$)
       .pipe(
-        filter((moveDownEvent) => moveDownEvent instanceof MouseEvent),
-        map((moveDownEvent) => moveDownEvent as MouseEvent),
+        filter(
+          (moveDownEvent) =>
+            moveDownEvent instanceof MouseEvent ||
+            moveDownEvent instanceof TouchEvent
+        ),
+        map((event) => {
+          if (event instanceof MouseEvent) {
+            return event as MouseEvent;
+          } else if (event instanceof TouchEvent) {
+            return (event as TouchEvent).touches[0];
+          }
+          return null;
+        }),
         tap(() => {
           this.arrows$$.next({ leftArrow: true, rightArrow: true });
         }),
-        concatMap((moveDownEvent) => {
-          const startX = moveDownEvent.pageX - sliderNative.offsetLeft;
+        concatMap((startEvent) => {
+          const startX = startEvent!.pageX - sliderNative.offsetLeft;
           const scrollLeft = sliderNative.scrollLeft;
-          return mouseMove$.pipe(
-            filter((moveEvent) => moveEvent instanceof MouseEvent),
-            map((moveEvent) => moveEvent as MouseEvent),
-            tap((moveEvent) => moveEvent.preventDefault()),
+
+          return merge(
+            mouseMove$.pipe(map((event) => event as MouseEvent)),
+            touchMove$.pipe(map((event) => (event as TouchEvent).touches[0]))
+          ).pipe(
+            tap((moveEvent) => {
+              if (moveEvent instanceof TouchEvent) moveEvent.preventDefault();
+            }),
             tap(() => {
               if (sliderNative.scrollLeft === 0) {
                 this.arrows$$.next({

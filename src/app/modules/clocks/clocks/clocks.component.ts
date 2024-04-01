@@ -47,9 +47,6 @@ export class ClocksComponent implements OnInit, OnDestroy {
     this.getPhotosByCityName();
   }
 
-  // error handling allEuropeTimes + adaptive
-  // historical air pollution
-
   public getAllCitiesCurrentTime(areas: IWorldAreas): void {
     this.isLoading$ = of(true);
 

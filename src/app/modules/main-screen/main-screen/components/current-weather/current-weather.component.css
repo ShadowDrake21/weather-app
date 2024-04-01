@@ -1,5 +1,7 @@
 .current-weather__list {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 30px;
 }
 
@@ -33,4 +35,29 @@
 .current-weather__info-block__item-span {
   font-weight: 700;
   padding-right: 5px;
+}
+
+@media (max-width: 600px) {
+  .ccurrent-weather__info-block__title {
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
+
+@media (max-width: 500px) {
+  .current-weather__list {
+    gap: 15px;
+  }
+
+  .current-weather__info-block__title {
+    font-size: 22px;
+    line-height: 26px;
+  }
+}
+
+@media (max-width: 400px) {
+  .current-weather__info-block__title {
+    font-size: 20px;
+    line-height: 24px;
+  }
 }

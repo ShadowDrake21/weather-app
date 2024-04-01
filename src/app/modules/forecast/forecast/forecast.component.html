@@ -3,7 +3,10 @@
   [ngStyle]="{ 'background-image': 'url(' + (queryBgPath$ | async) + ')' }"
 >
   <div class="forecast__title-wrapper">
-    <h1 class="forecast__title">City: {{ activeCityName$ | async }}</h1>
+    <h1 class="forecast__title">
+      City:
+      {{ (activeCityName$ | async) ?? "Unknown city" | truncateText : 10 }}
+    </h1>
     <div class="forecast__title-changer" #changer>
       <div
         class="forecast__title-changer__img-wrapper"
