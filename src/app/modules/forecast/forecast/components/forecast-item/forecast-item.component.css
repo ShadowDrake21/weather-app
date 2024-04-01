@@ -23,6 +23,10 @@
   margin-bottom: 10px;
 }
 
+.forecast-item__wrapper:last-child {
+  border-bottom: none;
+}
+
 .forecast-item__wrapper-title {
   text-align: center;
   font-size: 22px;
@@ -32,9 +36,55 @@
 
 .forecast-item__point {
   text-align: center;
+
+  text-wrap: wrap;
 }
 
 .forecast-item__point-span {
   font-weight: 700;
   padding-right: 5px;
+}
+
+@media (max-width: 1200px) {
+  .forecast-item {
+    max-width: 350px;
+  }
+
+  .forecast-item__wrapper {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 900px) {
+  .forecast-item {
+    max-width: 325px;
+    margin: 0 10px;
+    padding: 15px 10px;
+  }
+
+  .forecast-item__wrapper-title {
+    font-size: 20px;
+    line-height: 26px;
+    padding-bottom: 5px;
+  }
+
+  .forecast-item__time {
+    margin: 0 0 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .forecast-item__time {
+    font-size: 22px;
+    line-height: 28px;
+  }
+}
+
+@media (max-width: 400px) {
+  .forecast-item {
+    max-width: 300px;
+    margin: 0 5px;
+    padding: 10px 5px;
+  }
 }
