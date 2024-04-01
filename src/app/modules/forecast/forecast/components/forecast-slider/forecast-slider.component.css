@@ -50,3 +50,18 @@
 .slider__arrow-right {
   right: 15px;
 }
+
+@media (max-width: 1200px) {
+  .slider__arrow {
+    top: unset;
+  }
+}
+
+@media (max-width: 500px) {
+  .items {
+    padding: 10px;
+  }
+  .slider__arrow {
+    display: none;
+  }
+}
