@@ -14,6 +14,8 @@ import { MAIN_CORS_ENDPOINT } from '../constants/cors.constants';
   providedIn: 'root',
 })
 export class AirPollutionService {
+  private proxyAirPollutionUrl = `${MAIN_CORS_ENDPOINT}/api/airpollution`;
+
   constructor(private http: HttpClient) {}
 
   public getCurrentAirPollutionData(
@@ -21,7 +23,7 @@ export class AirPollutionService {
     lon: number
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
+      `${this.proxyAirPollutionUrl}?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}&type=current`
     );
   }
 
@@ -30,7 +32,7 @@ export class AirPollutionService {
     lon: number
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/forecast?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
+      `${this.proxyAirPollutionUrl}?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}&type=forecast`
     );
   }
 
@@ -41,7 +43,7 @@ export class AirPollutionService {
     end: number
   ): Observable<IAirPollution> {
     return this.http.get<IAirPollution>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}air_pollution/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${environment.weatherApiKey}`
+      `${this.proxyAirPollutionUrl}?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${environment.weatherApiKey}&type=history`
     );
   }
 }

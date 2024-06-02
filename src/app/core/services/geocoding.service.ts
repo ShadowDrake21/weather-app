@@ -14,6 +14,8 @@ import { MAIN_CORS_ENDPOINT } from '../constants/cors.constants';
   providedIn: 'root',
 })
 export class GeocodingService {
+  private proxyGeocodingUrl = `${MAIN_CORS_ENDPOINT}/api/geocoding`;
+
   constructor(private http: HttpClient) {}
 
   public getCoordinatesByLocationName(
@@ -23,7 +25,7 @@ export class GeocodingService {
     limit?: number
   ): Observable<IGeocoding[]> {
     return this.http.get<IGeocoding[]>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}geo/1.0/direct?q=${cityName}` +
+      `${this.proxyGeocodingUrl}?q=${cityName}` +
         (stateCode ? `,${stateCode}` : '') +
         (countryCode ? `,${countryCode}` : '') +
         `&limit=${limit}&appid=${environment.weatherApiKey}`
@@ -35,7 +37,7 @@ export class GeocodingService {
     countryCode: string
   ): Observable<IGeocodingByZipPost> {
     return this.http.get<IGeocodingByZipPost>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}geo/1.0/zip?zip=${zipcode},${countryCode}&appid=${environment.weatherApiKey}`
+      `${this.proxyGeocodingUrl}?zip=${zipcode},${countryCode}&appid=${environment.weatherApiKey}`
     );
   }
 
@@ -45,7 +47,7 @@ export class GeocodingService {
     limit?: number
   ): Observable<IGeocoding> {
     return this.http.get<IGeocoding>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${environment.weatherApiKey}`
+      `${this.proxyGeocodingUrl}?lat=${lat}&lon=${lon}&limit=${limit}&appid=${environment.weatherApiKey}`
     );
   }
 }

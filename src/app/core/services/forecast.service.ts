@@ -15,6 +15,7 @@ import { MAIN_CORS_ENDPOINT } from '../constants/cors.constants';
   providedIn: 'root',
 })
 export class ForecastService {
+  private proxyForecastUrl = `${MAIN_CORS_ENDPOINT}/api/forecast`;
   constructor(private http: HttpClient) {}
 
   public getFiveDaysForecastByCoordinates(
@@ -24,7 +25,7 @@ export class ForecastService {
     lang: string = 'en'
   ): Observable<IForecast> {
     return this.http.get<IForecast>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}forecast?lat=${lat}&lon=${lon}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
+      `${this.proxyForecastUrl}?lat=${lat}&lon=${lon}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 
@@ -36,7 +37,7 @@ export class ForecastService {
     lang: string = 'en'
   ): Observable<IForecast> {
     return this.http.get<IForecast>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}forecast?q=${cityName}` +
+      `${this.proxyForecastUrl}?q=${cityName}` +
         (stateCode ? `,${stateCode}` : '') +
         (countryCode ? `,${countryCode}` : '') +
         `&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
@@ -49,7 +50,7 @@ export class ForecastService {
     lang: string = 'en'
   ): Observable<IForecast> {
     return this.http.get<IForecast>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}forecast?id=${cityId}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
+      `${this.proxyForecastUrl}?id=${cityId}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 
@@ -60,7 +61,7 @@ export class ForecastService {
     lang: string = 'en'
   ): Observable<IForecast> {
     return this.http.get<IForecast>(
-      `${MAIN_CORS_ENDPOINT}${MAIN_WEATHER_ENDPOINT}${MAIN_WEATHER_PATH_PART}forecast?zip=${zipcode},${countryCode}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
+      `${this.proxyForecastUrl}?zip=${zipcode},${countryCode}&units=${units}&appid=${environment.weatherApiKey}&lang=${lang}`
     );
   }
 }
