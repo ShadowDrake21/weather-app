@@ -125,6 +125,10 @@ export class MainScreenComponent implements OnInit, OnDestroy {
     if (localStorage.getItem('wasSearch')) {
       localStorage.removeItem('wasSearch');
     }
+
+    if (localStorage.getItem('clocksClicked')) {
+      localStorage.removeItem('clocksClicked');
+    }
   }
 
   public handleClocksClick() {
